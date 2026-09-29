@@ -2,5 +2,6 @@
 __pycache__/
 *.pyc
 data/*.pdf
+data/faiss_index.bin
+data/faiss_index_meta.pkl
 .venv/
-*.faiss
