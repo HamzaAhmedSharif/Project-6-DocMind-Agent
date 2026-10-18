@@ -2,11 +2,10 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from langchain_google_genai import ChatGoogleGenerativeAI
+from agents.llm import get_llm
 from agents.retriever import Retriever
-from config import GOOGLE_API_KEY, LLM_MODEL
 
-llm = ChatGoogleGenerativeAI(model=LLM_MODEL, google_api_key=GOOGLE_API_KEY, temperature=0.2)
+llm = get_llm("writer")
 
 
 def answer_question(query: str, retriever: Retriever) -> dict:
