@@ -16,13 +16,15 @@ if LLM_PROVIDER == "ollama":
     LLM_BASE_URL = "http://localhost:11434/v1"
     LLM_API_KEY = "ollama"  # Ollama ignores the key, but the client needs a non-empty value
     LLM_MODEL = os.getenv("OLLAMA_MODEL", "docmind-llama")
-    LLM_RPM = 0  # 0 = no client-side pacing
+    LLM_RPM = 0  # 0 = no request pacing
+    LLM_TPM = 0  # 0 = no token pacing
     LLM_EXTRA_BODY = {}
 else:
     LLM_BASE_URL = os.getenv("HOSTED_BASE_URL")
     LLM_API_KEY = os.getenv("HOSTED_API_KEY")
     LLM_MODEL = os.getenv("HOSTED_MODEL")
     LLM_RPM = int(os.getenv("HOSTED_RPM", "5"))
+    LLM_TPM = int(os.getenv("HOSTED_TPM", "0"))  # provider tokens-per-minute limit; 0 = no token pacing
     # Optional provider-specific request fields as JSON, e.g. {"reasoning_effort": "low"}
     LLM_EXTRA_BODY = json.loads(os.getenv("HOSTED_EXTRA_BODY", "") or "{}")
     if not (LLM_BASE_URL and LLM_API_KEY and LLM_MODEL):

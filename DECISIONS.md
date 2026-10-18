@@ -1,4 +1,4 @@
-﻿# DocMind Agent — Decisions & Engineering Notes
+# DocMind Agent — Decisions & Engineering Notes
 
 Decisions are logged as they are made, with the evidence available at the time.
 
@@ -68,3 +68,19 @@ Decisions are logged as they are made, with the evidence available at the time.
 - Cause: the provider retired the model and the id was hard-coded.
 - Fix: model ids moved into configuration (`config.py`, `.env`), so one line changes.
 - Lesson: treat model ids as configuration, not constants.
+
+## M3b prep - pacing and evaluation design (2026-10-18)
+
+### Note: the binding limit was tokens per minute, and a fixed 60-second sleep wasted time
+- Symptom: each multi-agent test query hit one rate-limit retry and waited a fixed 60 seconds.
+- Isolation: the provider headers reported `x-ratelimit-limit-tokens: 8000` (per minute) and `x-ratelimit-limit-requests: 1000` (per day). Measured prompt tokens per query were 4198 (baseline, 1 call), 8743 (document question, 3 calls) and 13048 (web question, 3 calls), so one multi-agent query exceeds a full minute of token budget while requests stay far below their limit. The headers also showed the budget refilling continuously (590 tokens used, reset in 4.425 s, about 133 tokens/s) and that the limiter counted the prompt plus the requested `max_tokens` (78 + 512 = 590 deducted for a 97-token call).
+- Cause: pacing by request count and a blind 60-second sleep ignored the token budget.
+- Fix: `agents/llm.py` now paces with a token bucket per model (`HOSTED_TPM` in `.env`), reads the provider's `try again in` hint for retries, fails with a clear message on requests larger than the per-minute budget, and does not set `max_tokens` on pipeline calls. Measured after the change on the same document question: throttle_seconds=17.466099087397257, rate-limit retries=0 (before: one 60-second retry).
+- Lesson: read which limit the provider actually enforces, and pace against that one.
+
+### Decision: rule-based scoring for the comparison, not an LLM judge
+- Context: the comparison needs answer quality for two systems on the same questions, and the free tier allows about 8000 tokens per minute.
+- Chosen: key-fact coverage (regular expressions) for questions the paper answers, routing correctness plus citation presence for questions that need the web, and abstention for questions the paper does not answer. Every key fact is checked against the paper's own text by `evaluation/validate_questions.py` (26 of 26 facts found). Retrieval is also checked offline: whether the retrieved context contains the evidence for each key fact (`evaluation/retrieval_grid.py`).
+- Rejected: LLM-as-judge (the model that wrote an answer would grade it leniently, and judge calls would consume the same token budget).
+- Tradeoff accepted: regular-expression scoring can miss a correct answer that is phrased unusually; per-question outputs are committed so every scoring call can be audited.
+- Would revisit if: manual review of the committed outputs shows frequent scoring misses.
