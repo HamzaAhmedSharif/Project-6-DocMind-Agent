@@ -139,3 +139,12 @@ Decisions are logged as they are made, with the evidence available at the time.
 - Cause: on a revision the writer prompt contains the reviewer's feedback as an instruction ("address it"), and the model answered the reviewer inside the user-facing text.
 - Status: not fixed, because the pipeline code was frozen for the evaluation. The fix is one sentence in the writer's feedback note ("do not mention the reviewer or this feedback"), followed by a rerun of the comparison.
 - Lesson: text meant for the model can surface in the output; read the raw answers, not only the scores.
+
+## M5 - UI (2026-10-19)
+
+### Decision: the UI is a thin layer over the evaluated pipeline
+- Context: the pipeline code and settings were frozen when the comparison ran; a UI that uploads and indexes arbitrary PDFs would need changes inside `agents/`.
+- Chosen: `app.py` only calls the existing functions on the index built by `agents/ingest.py`, and shows routing, sources, call count, tokens and rate-limit waiting beside each answer. Evidence: `scripts/smoke_app.py` (headless AppTest passed: the app loads and baseline mode answered with exactly one LLM call).
+- Rejected: refactoring `Retriever` for in-memory uploads now (the evaluated code would then differ from the shipped code).
+- Tradeoff accepted: the demo answers questions about the indexed document only; uploads and a service API belong to the productionization project.
+- Would revisit if: the evaluation is rerun on new code.
