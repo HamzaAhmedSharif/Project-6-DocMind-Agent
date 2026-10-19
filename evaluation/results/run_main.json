@@ -1,0 +1,675 @@
+{
+  "started": "2026-10-19 09:32:33",
+  "fingerprint": {
+    "code_sha256": "21fe6ad9cb8bebf83b22fffc7eece21f525a9f3bbc0e01af945e5351170cd1db",
+    "settings": {
+      "provider": "hosted",
+      "model": "openai/gpt-oss-120b",
+      "extra_body": {
+        "reasoning_effort": "low"
+      },
+      "chunk_size": 150,
+      "chunk_overlap": 25,
+      "top_k": 10,
+      "embedding_model": "all-MiniLM-L6-v2"
+    }
+  },
+  "results": {
+    "d01": {
+      "type": "doc",
+      "question": "What is self-attention, as defined in the Transformer paper?",
+      "baseline": {
+        "answer": "Self‑attention (also called intra‑attention) is the attention mechanism that relates different positions of a single sequence in order to compute a representation of that sequence. In the Transformer it is used so that, for each position, the queries, keys and values all come from the same source (the output of the previous layer), allowing every position to attend to all other positions in the same sequence【Source: transformer_paper.pdf】.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 2.09,
+        "calls": 1,
+        "api_seconds": 1.97,
+        "throttle_seconds": 0.0,
+        "prompt_tokens": 2238,
+        "completion_tokens": 139
+      },
+      "multi": {
+        "answer": "**Self‑attention** (also called *intra‑attention*) is the attention mechanism used in the Transformer in which the queries, keys and values all come from the same source – the output of the previous layer of the model.  \nIn a self‑attention layer each position of the sequence can attend to (i.e., compute a weighted combination of) all other positions of that same sequence, allowing the model to build a representation of each token that incorporates information from the entire input (or, in the decoder, from all earlier positions). This mechanism replaces the recurrent or convolutional layers that were traditionally used for sequence modeling【Document Source: transformer_paper.pdf】.",
+        "route": "DOC",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [],
+        "wall_seconds": 11.49,
+        "calls": 3,
+        "api_seconds": 4.27,
+        "throttle_seconds": 7.15,
+        "prompt_tokens": 4831,
+        "completion_tokens": 214
+      }
+    },
+    "d02": {
+      "type": "doc",
+      "question": "Which attention function does the Transformer use, and how is it computed?",
+      "baseline": {
+        "answer": "The Transformer uses **Scaled Dot‑Product Attention**.  \nFor a set of queries **Q**, keys **K** (both of dimension \\(d_k\\)) and values **V** (dimension \\(d_v\\)), the function is computed by  \n\n1. Taking the dot product of each query with all keys,  \n2. Dividing each dot‑product by \\(\\sqrt{d_k}\\) (the scaling factor),  \n3. Applying a softmax to obtain attention weights, and  \n4. Using those weights to form a weighted sum of the corresponding values.  \n\nThis process yields the attention output for each query.  \n\n**Source:** transformer_paper.pdf, section “3.2.1 Scaled Dot‑Product Attention” which describes the computation as “We compute the dot products of the query with all keys, divide each by \\(\\sqrt{d_k}\\), and apply a …”【Source: transformer_paper.pdf】",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 15.88,
+        "calls": 1,
+        "api_seconds": 1.74,
+        "throttle_seconds": 14.09,
+        "prompt_tokens": 2333,
+        "completion_tokens": 254
+      },
+      "multi": {
+        "answer": "The Transformer relies on **Scaled Dot‑Product Attention** (the attention function described in Section 3.2 of the paper).  \n\nFor a set of queries **Q**, keys **K** and values **V** (with query/key dimension \\(d_k\\) and value dimension \\(d_v\\)), the function is computed as  \n\n\\[\n\\text{Attention}(Q,K,V)=\\operatorname{softmax}\\!\\left(\\frac{QK^{\\top}}{\\sqrt{d_k}}\\right)V .\n\\]\n\nIn words, the dot‑product between each query and all keys is taken, the result is scaled by \\(1/\\sqrt{d_k}\\), a softmax is applied to obtain attention weights, and those weights are used to take a weighted sum of the corresponding value vectors. This operation is then performed in parallel across multiple heads (Multi‑Head Attention) 【Document Source: transformer_paper.pdf】.",
+        "route": "DOC",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [],
+        "wall_seconds": 9.79,
+        "calls": 3,
+        "api_seconds": 6.16,
+        "throttle_seconds": 3.44,
+        "prompt_tokens": 5079,
+        "completion_tokens": 307
+      }
+    },
+    "d03": {
+      "type": "doc",
+      "question": "Why are the dot products scaled by the square root of the key dimension d_k?",
+      "baseline": {
+        "answer": "The dot products are scaled by \\(1/\\sqrt{d_k}\\) because, as \\(d_k\\) grows, the raw dot‑product values become large in magnitude. This pushes the softmax into regions where its gradients are extremely small, making learning difficult. Dividing the dot products by \\(\\sqrt{d_k}\\) keeps their magnitude in a range that yields stable softmax gradients.  \n\n**Source:** The Transformer paper explains that “we suspect that for large values of \\(d_k\\), the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients… To counteract this effect, we scale the dot products by \\(1/\\sqrt{d_k}\\).”【Source: transformer_paper.pdf】",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 4.24,
+        "calls": 1,
+        "api_seconds": 1.97,
+        "throttle_seconds": 2.18,
+        "prompt_tokens": 2592,
+        "completion_tokens": 181
+      },
+      "multi": {
+        "answer": "The dot products are divided by √dₖ because, as the key dimension grows, the raw dot‑product values become larger in magnitude (their variance is proportional to dₖ).  Very large values push the softmax into regions where its gradients are extremely small, which makes learning difficult.  Scaling the dot products by 1/√dₖ keeps their magnitude roughly constant, stabilizes the softmax, and preserves useful gradients.  \n\n**Source:** The Transformer paper explains that “for large values of dₖ, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients… To counteract this effect, we scale the dot products by 1/√dₖ”【Document Source: transformer_paper.pdf】.",
+        "route": "DOC",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [],
+        "wall_seconds": 47.77,
+        "calls": 3,
+        "api_seconds": 6.41,
+        "throttle_seconds": 41.28,
+        "prompt_tokens": 5574,
+        "completion_tokens": 266
+      }
+    },
+    "d04": {
+      "type": "doc",
+      "question": "How many identical layers do the encoder and the decoder each have in the base Transformer, and what are the two sub-layers of an encoder layer?",
+      "baseline": {
+        "answer": "The base Transformer uses **six identical layers** in both the encoder stack and the decoder stack ( N = 6 )【Source: transformer_paper.pdf】.  \n\nEach encoder layer is composed of **two sub‑layers**:  \n\n1. a **multi‑head self‑attention** mechanism, and  \n2. a **position‑wise fully connected feed‑forward network**.  \n\nThese two sub‑layers are each wrapped with a residual connection and layer‑normalization【Source: transformer_paper.pdf】.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 22.82,
+        "calls": 1,
+        "api_seconds": 2.48,
+        "throttle_seconds": 20.25,
+        "prompt_tokens": 2447,
+        "completion_tokens": 159
+      },
+      "multi": {
+        "answer": "The base Transformer uses **six identical layers** in both the encoder stack and the decoder stack ( N = 6 )【Document Source: transformer_paper.pdf】.  \n\nEach encoder layer is composed of **two sub‑layers**:  \n\n1. a **multi‑head self‑attention** mechanism, and  \n2. a **position‑wise fully‑connected feed‑forward network** (the FFN)【Document Source: transformer_paper.pdf】.",
+        "route": "DOC",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [],
+        "wall_seconds": 45.97,
+        "calls": 3,
+        "api_seconds": 5.82,
+        "throttle_seconds": 40.06,
+        "prompt_tokens": 5228,
+        "completion_tokens": 209
+      }
+    },
+    "d05": {
+      "type": "doc",
+      "question": "What are the model dimension and the number of attention heads used in the base Transformer?",
+      "baseline": {
+        "answer": "The base Transformer uses a model dimension of **dmodel = 512** and employs **8 parallel attention heads** (h = 8)【Source: transformer_paper.pdf】.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 20.46,
+        "calls": 1,
+        "api_seconds": 1.83,
+        "throttle_seconds": 18.57,
+        "prompt_tokens": 2545,
+        "completion_tokens": 70
+      },
+      "multi": {
+        "answer": "The base Transformer uses a model dimension of **\\(d_{\\text{model}} = 512\\)** and employs **\\(h = 8\\)** parallel attention heads.  \n\n**Sources**  \n- The architecture description notes that all sub‑layers (including embeddings) produce outputs of dimension *dmodel = 512*【Document Source: transformer_paper.pdf】.  \n- The multi‑head attention section states that the work employs *h = 8* parallel attention layers (heads)【Document Source: transformer_paper.pdf】.",
+        "route": "DOC",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [],
+        "wall_seconds": 47.34,
+        "calls": 3,
+        "api_seconds": 5.1,
+        "throttle_seconds": 42.16,
+        "prompt_tokens": 5424,
+        "completion_tokens": 209
+      }
+    },
+    "d06": {
+      "type": "doc",
+      "question": "What is multi-head attention and why does the paper use it?",
+      "baseline": {
+        "answer": "**What multi‑head attention is**\n\nMulti‑head attention is an attention mechanism that runs several attention “heads’’ in parallel.  \nFor each head the queries, keys and values are first linearly projected to lower‑dimensional spaces ( \\(d_k\\), \\(d_k\\) and \\(d_v\\) ), the scaled‑dot‑product attention is applied, and the resulting \\(d_v\\)‑dimensional outputs are concatenated and projected back to the model dimension \\(d_{\\text{model}}\\) (see the formula  \n\\( \\text{MultiHead}(Q,K,V)=\\text{Concat}(\\text{head}_1,\\dots,\\text{head}_h)W^O\\) with \\(\\text{head}_i=\\text{Attention}(QW_i^Q, KW_i^K, VW_i^V)\\) )【Source: transformer_paper.pdf】.\n\n**Why the paper uses it**\n\nThe authors found it beneficial because:\n\n* It lets the model **jointly attend to information from different representation subspaces at different positions**. A single attention head would average over all positions and thus inhibit the ability to capture diverse patterns【Source: transformer_paper.pdf】.  \n* By splitting the model dimension across \\(h\\) heads (e.g., \\(h=8\\) with \\(d_k=d_v=d_{\\text{model}}/h=64\\)), each head works on a reduced dimension, so the **total computational cost remains comparable to a single‑head attention with full dimensionality**【Source: transformer_paper.pdf】.  \n\nThus, multi‑head attention provides richer, more expressive representations without increasing computational expense, which is why the Transformer model adopts it.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 21.24,
+        "calls": 1,
+        "api_seconds": 2.54,
+        "throttle_seconds": 18.65,
+        "prompt_tokens": 2291,
+        "completion_tokens": 432
+      },
+      "multi": {
+        "answer": "**Multi‑head attention** is a mechanism in which the model first linearly projects the queries \\(Q\\), keys \\(K\\) and values \\(V\\) into several lower‑dimensional sub‑spaces (one “head” per sub‑space).  Each head independently performs the scaled‑dot‑product attention on its own projected \\(Q,K,V\\) and produces a \\(d_v\\)‑dimensional output.  The outputs of all heads are then concatenated and linearly projected again to obtain the final result:\n\n\\[\n\\text{MultiHead}(Q,K,V)=\\text{Concat}(\\text{head}_1,\\dots ,\\text{head}_h)W^O,\n\\qquad\n\\text{head}_i=\\text{Attention}(QW_i^Q, KW_i^K, VW_i^V)\n\\]\n\nwhere the projection matrices \\(W_i^Q, W_i^K, W_i^V\\) map the model dimension \\(d_{\\text{model}}\\) to the head dimensions \\(d_k,d_v\\) (in the paper \\(h=8\\) and \\(d_k=d_v=d_{\\text{model}}/h=64\\))【Document Source: transformer_paper.pdf】.\n\n**Why the paper uses it**\n\n1. **Capture information from multiple representation sub‑spaces** – each head can attend to different types of relationships (e.g., syntactic, semantic, long‑range dependencies).  The authors observe that different heads learn distinct tasks such as anaphora resolution or positional patterns【Document Source: transformer_paper.pdf】.\n\n2. **Maintain computational efficiency** – although each head works on a reduced dimensionality, the total cost is comparable to a single‑head attention with full dimensionality, because the projections split the work across heads【Document Source: transformer_paper.pdf】.\n\n3. **Improve model expressiveness** – a single attention head would average over all information, which can inhibit the model’s ability to focus on diverse aspects of the input.  Multi‑head attention mitigates this by allowing parallel, specialized attention operations【Document Source: transformer_paper.pdf】.",
+        "route": "DOC",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [],
+        "wall_seconds": 50.5,
+        "calls": 3,
+        "api_seconds": 7.8,
+        "throttle_seconds": 42.58,
+        "prompt_tokens": 5250,
+        "completion_tokens": 517
+      }
+    },
+    "d07": {
+      "type": "doc",
+      "question": "How does the Transformer give the model information about the order of tokens?",
+      "baseline": {
+        "answer": "The Transformer does not use recurrence or convolution to capture sequence order. Instead it **injects positional information by adding “positional encodings” to the input embeddings** at the bottom of both the encoder and decoder stacks. These encodings have the same dimensionality as the embeddings and are summed with them, providing the model with absolute (or relative) position cues for each token【Source: transformer_paper.pdf】.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 20.51,
+        "calls": 1,
+        "api_seconds": 1.77,
+        "throttle_seconds": 18.66,
+        "prompt_tokens": 2614,
+        "completion_tokens": 110
+      },
+      "multi": {
+        "answer": "The Transformer does not use recurrence or convolution to capture sequence order.  \nInstead, it **adds positional encodings to the input embeddings** at the bottom of both the encoder and decoder stacks. These encodings have the same dimensionality as the embeddings so they can be summed together. In the paper the authors use fixed sinusoidal functions of different frequencies ( sin and cos ) for each dimension, which provide each token with a unique “position” signal that the model can attend to【Document Source: transformer_paper.pdf】. This injection of positional information allows the self‑attention mechanism to know the relative or absolute order of the tokens.",
+        "route": "DOC",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [],
+        "wall_seconds": 49.98,
+        "calls": 3,
+        "api_seconds": 5.72,
+        "throttle_seconds": 44.18,
+        "prompt_tokens": 5580,
+        "completion_tokens": 229
+      }
+    },
+    "d08": {
+      "type": "doc",
+      "question": "Which optimizer and learning-rate warmup did the authors use to train the Transformer?",
+      "baseline": {
+        "answer": "The authors trained the Transformer with the **Adam optimizer** (β₁ = 0.9, β₂ = 0.98, ε = 10⁻⁹) and used a **learning‑rate warm‑up of 4000 steps** (the learning rate is increased linearly for the first 4000 steps and then decays proportionally to the inverse square root of the step number)【Source: transformer_paper.pdf】.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 21.01,
+        "calls": 1,
+        "api_seconds": 1.8,
+        "throttle_seconds": 19.14,
+        "prompt_tokens": 2760,
+        "completion_tokens": 122
+      },
+      "multi": {
+        "answer": "The authors trained the Transformer with the **Adam optimizer** (β₁ = 0.9, β₂ = 0.98, ε = 10⁻⁹).  \nFor the learning‑rate schedule they used a **warm‑up phase of 4 000 steps** – the learning rate is increased linearly for the first 4 000 training steps and then decays proportionally to the inverse square root of the step number【Document Source: transformer_paper.pdf】.",
+        "route": "DOC",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [],
+        "wall_seconds": 51.3,
+        "calls": 3,
+        "api_seconds": 5.67,
+        "throttle_seconds": 45.55,
+        "prompt_tokens": 5848,
+        "completion_tokens": 223
+      }
+    },
+    "d09": {
+      "type": "doc",
+      "question": "Which regularization techniques were used during training?",
+      "baseline": {
+        "answer": "The paper states that three regularization methods were applied during training.  Although the exact list is not reproduced in the excerpt, the surrounding text indicates that the three techniques are **dropout**, **attention‑dropout**, and **residual‑dropout**【Source: transformer_paper.pdf】.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 24.0,
+        "calls": 1,
+        "api_seconds": 2.02,
+        "throttle_seconds": 21.93,
+        "prompt_tokens": 2925,
+        "completion_tokens": 138
+      },
+      "multi": {
+        "answer": "The paper states that **three kinds of regularization were applied while training the Transformer**, and the only one that is explicitly mentioned in the provided excerpts is **dropout** (applied to both the attention sub‑layers and the residual connections).  \n\n> “We employ three types of regularization during training:” … (the excerpt goes on to discuss dropout for attention and residual layers)【Document Source: transformer_paper.pdf】  \n\nBecause the other two regularization methods are not listed in the supplied text, we can only confirm that dropout was used; the document does not provide evidence for label‑smoothing, weight‑decay, or any other technique. Therefore, based on the available excerpts, **dropout** is the regularization technique we can definitively cite.",
+        "route": "DOC",
+        "revisions": 1,
+        "review_feedback": "The answer should note that three regularization methods were used (though only dropout is specified in the excerpts) rather than implying dropout was the sole technique.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [],
+        "wall_seconds": 110.02,
+        "calls": 5,
+        "api_seconds": 9.74,
+        "throttle_seconds": 100.19,
+        "prompt_tokens": 12336,
+        "completion_tokens": 775
+      }
+    },
+    "d10": {
+      "type": "doc",
+      "question": "What BLEU scores did the big Transformer reach on WMT 2014 English-to-German and English-to-French?",
+      "baseline": {
+        "answer": "The big Transformer model achieved:\n\n* **English‑to‑German (WMT 2014):** **28.4 BLEU**  \n* **English‑to‑French (WMT 2014):** **41.0 BLEU**\n\nThese scores are reported for the “big” Transformer in the paper’s results section【Source: transformer_paper.pdf】.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 24.69,
+        "calls": 1,
+        "api_seconds": 2.54,
+        "throttle_seconds": 22.09,
+        "prompt_tokens": 2751,
+        "completion_tokens": 201
+      },
+      "multi": {
+        "answer": "The big Transformer model achieved:\n\n* **English → German (WMT 2014):** **28.4 BLEU**  \n* **English → French (WMT 2014):** **41.0 BLEU**  \n\nThese scores are reported for the “big” Transformer configuration in the paper’s results section【Document Source: transformer_paper.pdf】.",
+        "route": "DOC",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [],
+        "wall_seconds": 51.66,
+        "calls": 3,
+        "api_seconds": 5.96,
+        "throttle_seconds": 45.61,
+        "prompt_tokens": 5813,
+        "completion_tokens": 353
+      }
+    },
+    "d11": {
+      "type": "doc",
+      "question": "Why does the paper argue that self-attention is preferable to recurrent and convolutional layers?",
+      "baseline": {
+        "answer": "The paper argues that self‑attention is preferable because it **shortens the longest information‑flow path**, **requires far fewer sequential operations**, and **has a more favorable computational profile** than recurrent or convolutional layers.\n\n* **Path length:** A self‑attention layer connects every pair of positions directly, giving a maximum path length of 1 between any input and output token. By contrast, recurrent layers have a path length of n and convolutional layers have a path length of logₖ n, which makes learning long‑range dependencies harder【Source: transformer_paper.pdf】.  \n\n* **Sequential operations:** Self‑attention needs only O(1) sequential steps per layer, whereas recurrent layers need O(n) and convolutional layers need O(logₖ n) sequential steps【Source: transformer_paper.pdf】. This makes self‑attention far more parallelizable.  \n\n* **Computational complexity:** When the sequence length n is smaller than the representation dimension d (which is typical for sentence‑level models), the per‑layer cost of self‑attention ( O(n²·d) ) is lower than that of recurrent layers ( O(n·d²) ) and comparable to or better than convolutional layers【Source: transformer_paper.pdf】.  \n\nTogether, these factors mean self‑attention can learn long‑range dependencies more easily, exploit parallel hardware more effectively, and often run faster than recurrent or convolutional alternatives, which is why the paper favors it.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 24.95,
+        "calls": 1,
+        "api_seconds": 2.83,
+        "throttle_seconds": 22.05,
+        "prompt_tokens": 2258,
+        "completion_tokens": 366
+      },
+      "multi": {
+        "answer": "The paper argues that self‑attention is preferable to recurrent and convolutional layers for three main reasons:\n\n1. **Lower computational complexity for typical sequence lengths** – A self‑attention layer costs \\(O(n^{2}\\,d)\\) per layer, which is cheaper than a recurrent layer’s \\(O(n\\,d^{2})\\) when the sequence length \\(n\\) is smaller than the representation dimension \\(d\\) (the usual case for sentence‑level models)【Document Source: transformer_paper.pdf】.  \n\n2. **Much greater parallelism** – Because all positions can attend to each other simultaneously, a self‑attention layer requires only **one** sequential operation (\\(O(1)\\) depth), whereas a recurrent layer needs \\(O(n)\\) sequential steps and a convolutional layer needs \\(O(\\log_{k} n)\\) steps. This makes self‑attention far more amenable to GPU/TPU parallel execution【Document Source: transformer_paper.pdf】.  \n\n3. **Shorter maximum path length for long‑range dependencies** – In a self‑attention layer the maximum path length between any two input or output positions is **1**, while recurrent layers have a path length of \\(n\\) and convolutional layers have a path length of \\(\\log_{k} n\\). Shorter paths make it easier for the network to learn long‑range dependencies【Document Source: transformer_paper.pdf】.  \n\nTogether, these properties—lower per‑layer cost for typical NLP sequences, maximal parallelism, and constant‑length information paths—lead the authors to conclude that self‑attention is a more efficient and effective building block than recurrent or convolutional layers for sequence‑to‑sequence transduction.",
+        "route": "DOC",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [],
+        "wall_seconds": 48.71,
+        "calls": 3,
+        "api_seconds": 6.25,
+        "throttle_seconds": 42.35,
+        "prompt_tokens": 5096,
+        "completion_tokens": 456
+      }
+    },
+    "d12": {
+      "type": "doc",
+      "question": "What is the purpose of masking in the decoder's self-attention?",
+      "baseline": {
+        "answer": "The decoder’s self‑attention is masked so that each position cannot attend to any later (future) positions. By setting the illegal connections to −∞ before the softmax, the model is forced to use only the already‑generated tokens when predicting the next token, thereby preserving the auto‑regressive property of the decoder【Source: transformer_paper.pdf】.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 17.03,
+        "calls": 1,
+        "api_seconds": 1.96,
+        "throttle_seconds": 15.02,
+        "prompt_tokens": 2223,
+        "completion_tokens": 105
+      },
+      "multi": {
+        "answer": "Masking is used in the decoder’s self‑attention to block each position from looking ahead to tokens that have not yet been generated. By setting the illegal connections (i.e., “future” positions) to −∞ before the soft‑max, the decoder can only attend to the current and earlier positions. This ensures the model remains **auto‑regressive** – the prediction for position *i* can depend only on already‑known outputs at positions < *i* and not on any future tokens【Document Source: transformer_paper.pdf】.",
+        "route": "DOC",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [],
+        "wall_seconds": 42.76,
+        "calls": 3,
+        "api_seconds": 5.77,
+        "throttle_seconds": 36.91,
+        "prompt_tokens": 4780,
+        "completion_tokens": 217
+      }
+    },
+    "w01": {
+      "type": "web",
+      "question": "What are the latest developments in transformer architectures in 2026?",
+      "baseline": {
+        "answer": "The provided excerpts are taken from the original “Attention Is All You Need” paper and related sections describing the Transformer model as it was introduced in 2017. They discuss the architecture, training details, and results of that work, but they do not contain any information about developments in transformer architectures that have occurred after that time, such as advances made in 2026. Therefore, the answer cannot be derived from the given context.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 19.84,
+        "calls": 1,
+        "api_seconds": 1.84,
+        "throttle_seconds": 17.95,
+        "prompt_tokens": 2544,
+        "completion_tokens": 123
+      },
+      "multi": {
+        "answer": "**Latest developments in transformer architectures in 2026**\n\n| Development area | What’s new in 2026 | Sources |\n|------------------|-------------------|---------|\n| **Decentralized / fine‑grained Mixture‑of‑Experts (MoE)** | Transformer models now use *decentralized expert routing* that lets many small expert modules be activated conditionally for each token. This scaling strategy lets models grow to “unprecedented” sizes without a proportional increase in compute cost. | 【Web: https://sesamedisk.com/transformer-attention-mechanisms-2026】 |\n| **Elastic‑depth (dynamic compute budget)** | New “elastic‑depth” transformers (e.g., LoopFormer) can adjust the number of layers they execute at inference time, matching the workload’s latency or hardware constraints. This makes transformers more adaptable for production services where request‑by‑request compute budgets vary. | 【Web: https://sesamedisk.com/transformer-attention-mechanisms-2026】 |\n| **Sub‑quadratic attention kernels** | Researchers have introduced attention kernels whose computational complexity grows slower than the classic \\(O(n^2)\\) cost, optimizing GPU memory bandwidth and enabling longer sequences (e.g., for vision or audio) without exploding memory use. | 【Web: https://sesamedisk.com/transformer-attention-mechanisms-2026】 |\n| **Industrial‑time‑series forecasting transformers** | Transformer‑based forecasting platforms now incorporate *Mixture‑of‑Experts routing* for heterogeneous sensor data, predicting full output distributions rather than single values. These models are being positioned as “foundation” models for IIoT, similar to how GPT became a foundation model for language. | 【Web: https://www.patsnap.com/fr/resources/blog/rd-blog/industrial-time-series-forecasting-with-transformer-networks-2026】 |\n| **General‑purpose, edge‑deployable variants** | Lightweight transformer variants have been engineered for edge devices, balancing accuracy with strict latency and power budgets, extending transformer use beyond cloud servers to on‑device AI. | 【Web: https://www.patsnap.com/fr/resources/blog/rd-blog/industrial-time-series-forecasting-with-transformer-networks-2026】 |\n| **Continued dominance of the original “Attention‑Is‑All‑You‑Need” design** | The core self‑attention‑only architecture introduced in the 2017 paper remains the foundation for all newer variants; newer work builds on it rather than re‑introducing recurrence or convolution. | 【Document: transformer_paper.pdf】 |\n\n**Summary**\n\nIn 2026 the transformer landscape is moving from the original static, fully‑connected self‑attention model toward *conditional computation* and *dynamic depth*:\n\n* **Decentralized MoE** and **expert routing** let models scale efficiently.  \n* **Elastic‑depth** transformers adapt compute per request, improving latency‑cost trade‑offs.  \n* **Sub‑quadratic attention kernels** reduce memory and compute for very long sequences.  \n* These advances are being applied to new domains such as industrial time‑series forecasting and edge AI, while the fundamental self‑attention architecture from the 2017 “Attention Is All You Need” paper continues to underpin all of them.",
+        "route": "WEB",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [
+          "https://sesamedisk.com/transformer-attention-mechanisms-2026",
+          "https://www.patsnap.com/fr/resources/blog/rd-blog/industrial-time-series-forecasting-with-transformer-networks-2026",
+          "https://medium.com/@angelosorte1/transformer-architectures-in-2026-foundations-code-and-practical-resources-88022b521369"
+        ],
+        "wall_seconds": 73.9,
+        "calls": 3,
+        "api_seconds": 8.8,
+        "throttle_seconds": 60.62,
+        "prompt_tokens": 7569,
+        "completion_tokens": 769
+      }
+    },
+    "w02": {
+      "type": "web",
+      "question": "What is the current state of the art on the WMT 2014 English-to-German translation benchmark?",
+      "baseline": {
+        "answer": "The Transformer’s “big” model achieves a BLEU score of **28.4** on the WMT 2014 English‑to‑German translation benchmark, which the paper describes as a new state‑of‑the‑art result that surpasses all previously reported models (including ensembles)【Source: transformer_paper.pdf】.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 19.32,
+        "calls": 1,
+        "api_seconds": 3.1,
+        "throttle_seconds": 16.15,
+        "prompt_tokens": 2774,
+        "completion_tokens": 98
+      },
+      "multi": {
+        "answer": "The most recent published result for the WMT 2014 English‑to‑German translation benchmark is a **BLEU score of 28.4** achieved by the “big” Transformer model (Vaswani et al., *Attention Is All You Need*). This score surpasses all previously reported single‑model and ensemble systems by more than 2 BLEU points【Document Source: transformer_paper.pdf】.",
+        "route": "WEB",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [
+          "https://ecdysis.me/c/ext:535330cb8673fdd3",
+          "https://github.com/RedditSota/state-of-the-art-result-for-machine-learning-problems/blob/master/README.md",
+          "https://medium.com/@info.codetitan/how-to-pre-process-wmt-dataset-in-llm-28f7ca336947"
+        ],
+        "wall_seconds": 63.63,
+        "calls": 3,
+        "api_seconds": 7.26,
+        "throttle_seconds": 51.98,
+        "prompt_tokens": 7490,
+        "completion_tokens": 219
+      }
+    },
+    "w03": {
+      "type": "web",
+      "question": "How many citations does the paper 'Attention Is All You Need' have today?",
+      "baseline": {
+        "answer": "The provided excerpts from the paper do not contain any information about how many citations “Attention Is All You Need” has received. Therefore, I cannot answer the question from the given context.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 23.01,
+        "calls": 1,
+        "api_seconds": 2.28,
+        "throttle_seconds": 20.66,
+        "prompt_tokens": 2428,
+        "completion_tokens": 65
+      },
+      "multi": {
+        "answer": "The paper **“Attention Is All You Need”** has been cited **more than 250 000 times** (the Wikipedia entry for the paper notes that, as of 2026, it has been cited over 250 k times, placing it among the most‑cited papers of the 21st century)【Web Source: https://en.wikipedia.org/wiki/Attention_Is_All_You_Need】.",
+        "route": "WEB",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [
+          "https://en.wikipedia.org/wiki/Attention_Is_All_You_Need",
+          "https://www.linkedin.com/posts/richmalina_attention-is-not-all-you-need-imho-activity-7355338067999666176-6ueE",
+          "https://arxiv.org/abs/1706.03762"
+        ],
+        "wall_seconds": 57.84,
+        "calls": 3,
+        "api_seconds": 5.78,
+        "throttle_seconds": 48.73,
+        "prompt_tokens": 6773,
+        "completion_tokens": 238
+      }
+    },
+    "w04": {
+      "type": "web",
+      "question": "Which large language models released in 2026 are based on the transformer architecture?",
+      "baseline": {
+        "answer": "The provided context does not contain any information about large language models released in 2026, nor does it list any such models that are based on the Transformer architecture. Therefore, I cannot answer the question from the given sources.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 21.3,
+        "calls": 1,
+        "api_seconds": 1.72,
+        "throttle_seconds": 19.52,
+        "prompt_tokens": 2385,
+        "completion_tokens": 75
+      },
+      "multi": {
+        "answer": "**Large‑language models that were released in 2026 and are described in the sources as being built on the Transformer architecture**\n\n| Model (2026 release) | How the source describes its architecture |\n|----------------------|--------------------------------------------|\n| **PaLM (Pathways Language Model)** – 540 billion‑parameter model from Google | “The Pathways Language Model is a **540‑billion‑parameter transformer‑based model** …”【Web Source: https://www.techtarget.com/whatis/feature/12-of-the-best-large-language-models】 |\n| **Qwen 3.5** family (sizes 0.8 B – 397 B) | “Qwen3.5 … is a family of **multimodal models utilizing the architecture first introduced in Qwen3‑Next** … it comprises both base and hybrid reasoning models …” (the Qwen 3‑Next architecture is a pure Transformer)【Web Source: https://www.ibm.com/think/topics/large-language-models-list】 |\n| **Qwen 3.5‑397B‑A17B** (the flagship 397 B model) | Same description as above – it is part of the Qwen 3.5 family that “utilizes the architecture first introduced in Qwen3‑Next,” which is a Transformer‑based design【Web Source: https://www.ibm.com/think/topics/large-language-models-list】 |\n\n**Why other 2026 models are *not* included**\n\n* **Olmo Hybrid** – The IBM source says it is “a **hybrid architecture combining both transformer and linear RNNs**.” Because the model is explicitly described as a hybrid rather than a pure Transformer, it does **not** meet the criterion of being “based on the transformer architecture.” Therefore it is excluded, addressing the reviewer’s concern.  \n\n* Other 2026 models mentioned in the web sources (e.g., Phi, Gemini) are either not identified as Transformer‑based in the provided excerpts or lack a clear 2026 release date, so they are not listed.\n\n**Answer**\n\nThe 2026 large language models that are explicitly identified as Transformer‑based are **Google’s PaLM**, and the **Qwen 3.5** family (including the flagship Qwen 3.5‑397B‑A17B). The Olmo Hybrid model, while containing a Transformer component, is a hybrid model and therefore is not counted as a pure Transformer‑based LLM.",
+        "route": "WEB",
+        "revisions": 1,
+        "review_feedback": "The claim that Qwen 3.5 models are explicitly described as transformer‑based is not directly supported by the provided source excerpts.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [
+          "https://www.techtarget.com/whatis/feature/12-of-the-best-large-language-models",
+          "https://www.ibm.com/think/topics/large-language-models-list",
+          "https://hatchworks.com/blog/gen-ai/large-language-models-guide"
+        ],
+        "wall_seconds": 131.51,
+        "calls": 5,
+        "api_seconds": 12.48,
+        "throttle_seconds": 114.78,
+        "prompt_tokens": 14131,
+        "completion_tokens": 1469
+      }
+    },
+    "a01": {
+      "type": "absent",
+      "question": "According to the paper, what accuracy did the Transformer reach on the ImageNet image classification task?",
+      "baseline": {
+        "answer": "The provided excerpts from the Transformer paper do not contain any information about ImageNet image‑classification results or the accuracy the Transformer achieved on that task. Therefore, the answer cannot be found in the given context.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 18.7,
+        "calls": 1,
+        "api_seconds": 1.86,
+        "throttle_seconds": 16.78,
+        "prompt_tokens": 2769,
+        "completion_tokens": 71
+      },
+      "multi": {
+        "answer": "The Transformer paper does not report any ImageNet classification results – it only evaluates the model on machine‑translation benchmarks (e.g., English‑German and English‑French) and on a few parsing tasks. No accuracy figure for ImageNet is given in the document. 【Document Source: transformer_paper.pdf】",
+        "route": "DOC",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [],
+        "wall_seconds": 50.66,
+        "calls": 3,
+        "api_seconds": 5.11,
+        "throttle_seconds": 45.46,
+        "prompt_tokens": 5826,
+        "completion_tokens": 170
+      }
+    },
+    "a02": {
+      "type": "absent",
+      "question": "According to the paper, what BLEU score did the Transformer reach on English-to-Chinese translation?",
+      "baseline": {
+        "answer": "The provided excerpts do not contain any information about a BLEU score for English‑to‑Chinese translation. Therefore, the paper’s result for that language pair is not given in the supplied context.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 23.73,
+        "calls": 1,
+        "api_seconds": 2.12,
+        "throttle_seconds": 21.53,
+        "prompt_tokens": 2829,
+        "completion_tokens": 63
+      },
+      "multi": {
+        "answer": "The Transformer paper does not report a BLEU score for English‑to‑Chinese translation. All of the BLEU results that are presented in the document are for the WMT 2014 English‑to‑German and English‑to‑French tasks (e.g., 28.4 BLEU on English‑German and 41.0 / 41.8 BLEU on English‑French)【Document Source: transformer_paper.pdf】. No English‑Chinese experiment or BLEU figure is mentioned in the provided excerpts.",
+        "route": "DOC",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [],
+        "wall_seconds": 51.5,
+        "calls": 3,
+        "api_seconds": 5.41,
+        "throttle_seconds": 45.99,
+        "prompt_tokens": 5995,
+        "completion_tokens": 214
+      }
+    },
+    "a03": {
+      "type": "absent",
+      "question": "According to the paper, what word error rate did the model reach on a speech recognition benchmark?",
+      "baseline": {
+        "answer": "The provided excerpts from the Transformer paper do not contain any information about a speech‑recognition benchmark or a word error rate achieved by the model. Therefore, the answer cannot be found in the given context.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 23.67,
+        "calls": 1,
+        "api_seconds": 2.09,
+        "throttle_seconds": 21.53,
+        "prompt_tokens": 2691,
+        "completion_tokens": 70
+      },
+      "multi": {
+        "answer": "The Transformer paper does not report any word‑error‑rate (WER) results on a speech‑recognition benchmark. All of the evaluation metrics discussed in the document are BLEU scores for machine‑translation and F‑scores for parsing; there is no mention of WER in any of the cited sections. 【Document Source: transformer_paper.pdf】",
+        "route": "DOC",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [],
+        "wall_seconds": 49.31,
+        "calls": 3,
+        "api_seconds": 7.12,
+        "throttle_seconds": 42.11,
+        "prompt_tokens": 5679,
+        "completion_tokens": 189
+      }
+    },
+    "a04": {
+      "type": "absent",
+      "question": "According to the paper, how many kilowatt-hours of energy did training the big model consume?",
+      "baseline": {
+        "answer": "The provided excerpts do not contain any information about the amount of energy (kilowatt‑hours) consumed while training the big model. Therefore, I cannot answer the question based on the given context.",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "wall_seconds": 20.12,
+        "calls": 1,
+        "api_seconds": 1.56,
+        "throttle_seconds": 18.5,
+        "prompt_tokens": 2520,
+        "completion_tokens": 62
+      },
+      "multi": {
+        "answer": "The paper does not give a figure for the electricity consumption of the big model in kilowatt‑hours. It reports the training time (3.5 days on eight NVIDIA P100 GPUs) and the number of floating‑point operations, but it never converts that into a kWh value. Therefore, the amount of energy (in kilowatt‑hours) used to train the big model is not provided in the document. 【Document Source: transformer_paper.pdf】",
+        "route": "DOC",
+        "revisions": 0,
+        "review_feedback": "",
+        "doc_sources": [
+          "transformer_paper.pdf"
+        ],
+        "web_urls": [],
+        "wall_seconds": 47.45,
+        "calls": 3,
+        "api_seconds": 5.93,
+        "throttle_seconds": 41.41,
+        "prompt_tokens": 5361,
+        "completion_tokens": 223
+      }
+    }
+  }
+}

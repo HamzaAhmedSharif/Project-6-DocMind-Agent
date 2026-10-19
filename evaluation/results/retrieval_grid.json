@@ -1,8 +1,22 @@
 {
-  "created": "2026-10-19 03:27:22",
+  "created": "2026-10-19 09:21:56",
   "embedding_model": "all-MiniLM-L6-v2",
   "facts_used": 26,
   "facts_total": 26,
+  "selection_rule": {
+    "max_context_tokens": 2200,
+    "min_fact_recall": 0.8,
+    "order": "highest fact_recall, then fewer tokens, then smaller chunk_size"
+  },
+  "selected": {
+    "chunk_size": 150,
+    "overlap": 25,
+    "top_k": 10,
+    "num_chunks": 49,
+    "fact_recall": 0.923,
+    "question_full_recall": 0.917,
+    "approx_context_tokens": 1904
+  },
   "rows": [
     {
       "chunk_size": 800,
@@ -11,7 +25,23 @@
       "num_chunks": 9,
       "fact_recall": 0.462,
       "question_full_recall": 0.417,
-      "approx_context_tokens": 2947
+      "approx_context_tokens": 2947,
+      "missed_facts": [
+        "d04: N = 6 identical layers",
+        "d04: a position-wise fully connected feed-forward sub-layer",
+        "d05: h = 8 parallel attention heads",
+        "d06: attends to different representation subspaces",
+        "d06: linearly projects queries, keys and values",
+        "d07: positional encodings",
+        "d07: sine and cosine functions of different frequencies",
+        "d07: added to the input embeddings",
+        "d08: Adam optimizer",
+        "d08: warmup_steps = 4000",
+        "d09: residual dropout",
+        "d09: label smoothing",
+        "d10: 28.4 BLEU on English-to-German",
+        "d10: 41.8 (or 41.0) BLEU on English-to-French"
+      ]
     },
     {
       "chunk_size": 800,
@@ -20,7 +50,19 @@
       "num_chunks": 9,
       "fact_recall": 0.615,
       "question_full_recall": 0.583,
-      "approx_context_tokens": 3930
+      "approx_context_tokens": 3930,
+      "missed_facts": [
+        "d04: N = 6 identical layers",
+        "d04: a position-wise fully connected feed-forward sub-layer",
+        "d05: h = 8 parallel attention heads",
+        "d07: positional encodings",
+        "d07: sine and cosine functions of different frequencies",
+        "d07: added to the input embeddings",
+        "d08: Adam optimizer",
+        "d08: warmup_steps = 4000",
+        "d09: residual dropout",
+        "d09: label smoothing"
+      ]
     },
     {
       "chunk_size": 800,
@@ -29,7 +71,42 @@
       "num_chunks": 9,
       "fact_recall": 0.962,
       "question_full_recall": 0.917,
-      "approx_context_tokens": 4912
+      "approx_context_tokens": 4912,
+      "missed_facts": [
+        "d05: h = 8 parallel attention heads"
+      ]
+    },
+    {
+      "chunk_size": 800,
+      "overlap": 100,
+      "top_k": 6,
+      "num_chunks": 9,
+      "fact_recall": 0.962,
+      "question_full_recall": 0.917,
+      "approx_context_tokens": 5895,
+      "missed_facts": [
+        "d05: h = 8 parallel attention heads"
+      ]
+    },
+    {
+      "chunk_size": 800,
+      "overlap": 100,
+      "top_k": 8,
+      "num_chunks": 9,
+      "fact_recall": 1.0,
+      "question_full_recall": 1.0,
+      "approx_context_tokens": 7860,
+      "missed_facts": []
+    },
+    {
+      "chunk_size": 800,
+      "overlap": 100,
+      "top_k": 10,
+      "num_chunks": 9,
+      "fact_recall": 1.0,
+      "question_full_recall": 1.0,
+      "approx_context_tokens": 9825,
+      "missed_facts": []
     },
     {
       "chunk_size": 400,
@@ -38,7 +115,15 @@
       "num_chunks": 18,
       "fact_recall": 0.769,
       "question_full_recall": 0.667,
-      "approx_context_tokens": 1484
+      "approx_context_tokens": 1484,
+      "missed_facts": [
+        "d02: scaling by the square root of the key dimension",
+        "d06: attends to different representation subspaces",
+        "d06: linearly projects queries, keys and values",
+        "d07: sine and cosine functions of different frequencies",
+        "d07: added to the input embeddings",
+        "d08: Adam optimizer"
+      ]
     },
     {
       "chunk_size": 400,
@@ -47,7 +132,15 @@
       "num_chunks": 18,
       "fact_recall": 0.769,
       "question_full_recall": 0.667,
-      "approx_context_tokens": 1979
+      "approx_context_tokens": 1979,
+      "missed_facts": [
+        "d02: scaling by the square root of the key dimension",
+        "d06: attends to different representation subspaces",
+        "d06: linearly projects queries, keys and values",
+        "d07: sine and cosine functions of different frequencies",
+        "d07: added to the input embeddings",
+        "d08: Adam optimizer"
+      ]
     },
     {
       "chunk_size": 400,
@@ -56,7 +149,54 @@
       "num_chunks": 18,
       "fact_recall": 0.808,
       "question_full_recall": 0.75,
-      "approx_context_tokens": 2474
+      "approx_context_tokens": 2474,
+      "missed_facts": [
+        "d06: attends to different representation subspaces",
+        "d06: linearly projects queries, keys and values",
+        "d07: sine and cosine functions of different frequencies",
+        "d07: added to the input embeddings",
+        "d08: Adam optimizer"
+      ]
+    },
+    {
+      "chunk_size": 400,
+      "overlap": 50,
+      "top_k": 6,
+      "num_chunks": 18,
+      "fact_recall": 0.808,
+      "question_full_recall": 0.75,
+      "approx_context_tokens": 2969,
+      "missed_facts": [
+        "d06: attends to different representation subspaces",
+        "d06: linearly projects queries, keys and values",
+        "d07: sine and cosine functions of different frequencies",
+        "d07: added to the input embeddings",
+        "d08: Adam optimizer"
+      ]
+    },
+    {
+      "chunk_size": 400,
+      "overlap": 50,
+      "top_k": 8,
+      "num_chunks": 18,
+      "fact_recall": 0.885,
+      "question_full_recall": 0.833,
+      "approx_context_tokens": 3958,
+      "missed_facts": [
+        "d07: sine and cosine functions of different frequencies",
+        "d07: added to the input embeddings",
+        "d08: Adam optimizer"
+      ]
+    },
+    {
+      "chunk_size": 400,
+      "overlap": 50,
+      "top_k": 10,
+      "num_chunks": 18,
+      "fact_recall": 1.0,
+      "question_full_recall": 1.0,
+      "approx_context_tokens": 4948,
+      "missed_facts": []
     },
     {
       "chunk_size": 250,
@@ -65,7 +205,16 @@
       "num_chunks": 29,
       "fact_recall": 0.731,
       "question_full_recall": 0.667,
-      "approx_context_tokens": 957
+      "approx_context_tokens": 957,
+      "missed_facts": [
+        "d02: scaled dot-product attention",
+        "d02: softmax over the scaled dot products",
+        "d02: scaling by the square root of the key dimension",
+        "d06: linearly projects queries, keys and values",
+        "d07: sine and cosine functions of different frequencies",
+        "d07: added to the input embeddings",
+        "d08: Adam optimizer"
+      ]
     },
     {
       "chunk_size": 250,
@@ -74,7 +223,15 @@
       "num_chunks": 29,
       "fact_recall": 0.769,
       "question_full_recall": 0.667,
-      "approx_context_tokens": 1277
+      "approx_context_tokens": 1277,
+      "missed_facts": [
+        "d02: softmax over the scaled dot products",
+        "d02: scaling by the square root of the key dimension",
+        "d06: linearly projects queries, keys and values",
+        "d07: sine and cosine functions of different frequencies",
+        "d07: added to the input embeddings",
+        "d08: Adam optimizer"
+      ]
     },
     {
       "chunk_size": 250,
@@ -83,7 +240,245 @@
       "num_chunks": 29,
       "fact_recall": 0.846,
       "question_full_recall": 0.75,
-      "approx_context_tokens": 1596
+      "approx_context_tokens": 1596,
+      "missed_facts": [
+        "d06: linearly projects queries, keys and values",
+        "d07: sine and cosine functions of different frequencies",
+        "d07: added to the input embeddings",
+        "d08: Adam optimizer"
+      ]
+    },
+    {
+      "chunk_size": 250,
+      "overlap": 40,
+      "top_k": 6,
+      "num_chunks": 29,
+      "fact_recall": 0.846,
+      "question_full_recall": 0.75,
+      "approx_context_tokens": 1915,
+      "missed_facts": [
+        "d06: linearly projects queries, keys and values",
+        "d07: sine and cosine functions of different frequencies",
+        "d07: added to the input embeddings",
+        "d08: Adam optimizer"
+      ]
+    },
+    {
+      "chunk_size": 250,
+      "overlap": 40,
+      "top_k": 8,
+      "num_chunks": 29,
+      "fact_recall": 0.846,
+      "question_full_recall": 0.75,
+      "approx_context_tokens": 2554,
+      "missed_facts": [
+        "d06: linearly projects queries, keys and values",
+        "d07: sine and cosine functions of different frequencies",
+        "d07: added to the input embeddings",
+        "d08: Adam optimizer"
+      ]
+    },
+    {
+      "chunk_size": 250,
+      "overlap": 40,
+      "top_k": 10,
+      "num_chunks": 29,
+      "fact_recall": 0.923,
+      "question_full_recall": 0.917,
+      "approx_context_tokens": 3192,
+      "missed_facts": [
+        "d07: sine and cosine functions of different frequencies",
+        "d07: added to the input embeddings"
+      ]
+    },
+    {
+      "chunk_size": 200,
+      "overlap": 30,
+      "top_k": 3,
+      "num_chunks": 36,
+      "fact_recall": 0.615,
+      "question_full_recall": 0.583,
+      "approx_context_tokens": 763,
+      "missed_facts": [
+        "d01: relates different positions of a single sequence",
+        "d01: to compute a representation of the sequence",
+        "d02: softmax over the scaled dot products",
+        "d02: scaling by the square root of the key dimension",
+        "d06: linearly projects queries, keys and values",
+        "d07: positional encodings",
+        "d07: sine and cosine functions of different frequencies",
+        "d07: added to the input embeddings",
+        "d09: residual dropout",
+        "d09: label smoothing"
+      ]
+    },
+    {
+      "chunk_size": 200,
+      "overlap": 30,
+      "top_k": 4,
+      "num_chunks": 36,
+      "fact_recall": 0.692,
+      "question_full_recall": 0.667,
+      "approx_context_tokens": 1018,
+      "missed_facts": [
+        "d02: softmax over the scaled dot products",
+        "d02: scaling by the square root of the key dimension",
+        "d06: linearly projects queries, keys and values",
+        "d07: positional encodings",
+        "d07: sine and cosine functions of different frequencies",
+        "d07: added to the input embeddings",
+        "d09: residual dropout",
+        "d09: label smoothing"
+      ]
+    },
+    {
+      "chunk_size": 200,
+      "overlap": 30,
+      "top_k": 5,
+      "num_chunks": 36,
+      "fact_recall": 0.808,
+      "question_full_recall": 0.75,
+      "approx_context_tokens": 1273,
+      "missed_facts": [
+        "d02: softmax over the scaled dot products",
+        "d02: scaling by the square root of the key dimension",
+        "d06: linearly projects queries, keys and values",
+        "d09: residual dropout",
+        "d09: label smoothing"
+      ]
+    },
+    {
+      "chunk_size": 200,
+      "overlap": 30,
+      "top_k": 6,
+      "num_chunks": 36,
+      "fact_recall": 0.846,
+      "question_full_recall": 0.833,
+      "approx_context_tokens": 1527,
+      "missed_facts": [
+        "d02: softmax over the scaled dot products",
+        "d02: scaling by the square root of the key dimension",
+        "d09: residual dropout",
+        "d09: label smoothing"
+      ]
+    },
+    {
+      "chunk_size": 200,
+      "overlap": 30,
+      "top_k": 8,
+      "num_chunks": 36,
+      "fact_recall": 0.923,
+      "question_full_recall": 0.917,
+      "approx_context_tokens": 2037,
+      "missed_facts": [
+        "d09: residual dropout",
+        "d09: label smoothing"
+      ]
+    },
+    {
+      "chunk_size": 200,
+      "overlap": 30,
+      "top_k": 10,
+      "num_chunks": 36,
+      "fact_recall": 0.923,
+      "question_full_recall": 0.917,
+      "approx_context_tokens": 2546,
+      "missed_facts": [
+        "d09: residual dropout",
+        "d09: label smoothing"
+      ]
+    },
+    {
+      "chunk_size": 150,
+      "overlap": 25,
+      "top_k": 3,
+      "num_chunks": 49,
+      "fact_recall": 0.769,
+      "question_full_recall": 0.667,
+      "approx_context_tokens": 571,
+      "missed_facts": [
+        "d02: softmax over the scaled dot products",
+        "d02: scaling by the square root of the key dimension",
+        "d05: d_model = 512",
+        "d06: linearly projects queries, keys and values",
+        "d09: residual dropout",
+        "d09: label smoothing"
+      ]
+    },
+    {
+      "chunk_size": 150,
+      "overlap": 25,
+      "top_k": 4,
+      "num_chunks": 49,
+      "fact_recall": 0.769,
+      "question_full_recall": 0.667,
+      "approx_context_tokens": 761,
+      "missed_facts": [
+        "d02: softmax over the scaled dot products",
+        "d02: scaling by the square root of the key dimension",
+        "d05: d_model = 512",
+        "d06: linearly projects queries, keys and values",
+        "d09: residual dropout",
+        "d09: label smoothing"
+      ]
+    },
+    {
+      "chunk_size": 150,
+      "overlap": 25,
+      "top_k": 5,
+      "num_chunks": 49,
+      "fact_recall": 0.808,
+      "question_full_recall": 0.75,
+      "approx_context_tokens": 952,
+      "missed_facts": [
+        "d02: softmax over the scaled dot products",
+        "d02: scaling by the square root of the key dimension",
+        "d06: linearly projects queries, keys and values",
+        "d09: residual dropout",
+        "d09: label smoothing"
+      ]
+    },
+    {
+      "chunk_size": 150,
+      "overlap": 25,
+      "top_k": 6,
+      "num_chunks": 49,
+      "fact_recall": 0.846,
+      "question_full_recall": 0.75,
+      "approx_context_tokens": 1142,
+      "missed_facts": [
+        "d02: softmax over the scaled dot products",
+        "d06: linearly projects queries, keys and values",
+        "d09: residual dropout",
+        "d09: label smoothing"
+      ]
+    },
+    {
+      "chunk_size": 150,
+      "overlap": 25,
+      "top_k": 8,
+      "num_chunks": 49,
+      "fact_recall": 0.885,
+      "question_full_recall": 0.833,
+      "approx_context_tokens": 1523,
+      "missed_facts": [
+        "d02: softmax over the scaled dot products",
+        "d09: residual dropout",
+        "d09: label smoothing"
+      ]
+    },
+    {
+      "chunk_size": 150,
+      "overlap": 25,
+      "top_k": 10,
+      "num_chunks": 49,
+      "fact_recall": 0.923,
+      "question_full_recall": 0.917,
+      "approx_context_tokens": 1904,
+      "missed_facts": [
+        "d09: residual dropout",
+        "d09: label smoothing"
+      ]
     }
   ]
 }

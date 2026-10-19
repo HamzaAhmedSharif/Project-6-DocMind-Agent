@@ -1,0 +1,398 @@
+{
+  "d01": {
+    "baseline": {
+      "type": "doc",
+      "hits": [
+        true,
+        true
+      ],
+      "found": 2,
+      "total": 2,
+      "all_found": true
+    },
+    "multi": {
+      "type": "doc",
+      "hits": [
+        false,
+        true
+      ],
+      "found": 1,
+      "total": 2,
+      "all_found": false,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "d02": {
+    "baseline": {
+      "type": "doc",
+      "hits": [
+        false,
+        true,
+        true
+      ],
+      "found": 2,
+      "total": 3,
+      "all_found": false
+    },
+    "multi": {
+      "type": "doc",
+      "hits": [
+        false,
+        true,
+        true
+      ],
+      "found": 2,
+      "total": 3,
+      "all_found": false,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "d03": {
+    "baseline": {
+      "type": "doc",
+      "hits": [
+        true,
+        true
+      ],
+      "found": 2,
+      "total": 2,
+      "all_found": true
+    },
+    "multi": {
+      "type": "doc",
+      "hits": [
+        true,
+        true
+      ],
+      "found": 2,
+      "total": 2,
+      "all_found": true,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "d04": {
+    "baseline": {
+      "type": "doc",
+      "hits": [
+        true,
+        false
+      ],
+      "found": 1,
+      "total": 2,
+      "all_found": false
+    },
+    "multi": {
+      "type": "doc",
+      "hits": [
+        true,
+        false
+      ],
+      "found": 1,
+      "total": 2,
+      "all_found": false,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "d05": {
+    "baseline": {
+      "type": "doc",
+      "hits": [
+        true,
+        true
+      ],
+      "found": 2,
+      "total": 2,
+      "all_found": true
+    },
+    "multi": {
+      "type": "doc",
+      "hits": [
+        true,
+        true
+      ],
+      "found": 2,
+      "total": 2,
+      "all_found": true,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "d06": {
+    "baseline": {
+      "type": "doc",
+      "hits": [
+        true,
+        true
+      ],
+      "found": 2,
+      "total": 2,
+      "all_found": true
+    },
+    "multi": {
+      "type": "doc",
+      "hits": [
+        false,
+        true
+      ],
+      "found": 1,
+      "total": 2,
+      "all_found": false,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "d07": {
+    "baseline": {
+      "type": "doc",
+      "hits": [
+        true,
+        false,
+        true
+      ],
+      "found": 2,
+      "total": 3,
+      "all_found": false
+    },
+    "multi": {
+      "type": "doc",
+      "hits": [
+        true,
+        true,
+        true
+      ],
+      "found": 3,
+      "total": 3,
+      "all_found": true,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "d08": {
+    "baseline": {
+      "type": "doc",
+      "hits": [
+        true,
+        true
+      ],
+      "found": 2,
+      "total": 2,
+      "all_found": true
+    },
+    "multi": {
+      "type": "doc",
+      "hits": [
+        true,
+        false
+      ],
+      "found": 1,
+      "total": 2,
+      "all_found": false,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "d09": {
+    "baseline": {
+      "type": "doc",
+      "hits": [
+        true,
+        false
+      ],
+      "found": 1,
+      "total": 2,
+      "all_found": false
+    },
+    "multi": {
+      "type": "doc",
+      "hits": [
+        true,
+        false
+      ],
+      "found": 1,
+      "total": 2,
+      "all_found": false,
+      "route_correct": true,
+      "revised": true
+    }
+  },
+  "d10": {
+    "baseline": {
+      "type": "doc",
+      "hits": [
+        true,
+        true
+      ],
+      "found": 2,
+      "total": 2,
+      "all_found": true
+    },
+    "multi": {
+      "type": "doc",
+      "hits": [
+        true,
+        true
+      ],
+      "found": 2,
+      "total": 2,
+      "all_found": true,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "d11": {
+    "baseline": {
+      "type": "doc",
+      "hits": [
+        true,
+        true
+      ],
+      "found": 2,
+      "total": 2,
+      "all_found": true
+    },
+    "multi": {
+      "type": "doc",
+      "hits": [
+        true,
+        true
+      ],
+      "found": 2,
+      "total": 2,
+      "all_found": true,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "d12": {
+    "baseline": {
+      "type": "doc",
+      "hits": [
+        false,
+        false
+      ],
+      "found": 0,
+      "total": 2,
+      "all_found": false
+    },
+    "multi": {
+      "type": "doc",
+      "hits": [
+        false,
+        true
+      ],
+      "found": 1,
+      "total": 2,
+      "all_found": false,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "w01": {
+    "baseline": {
+      "type": "web",
+      "abstained": true
+    },
+    "multi": {
+      "type": "web",
+      "abstained": false,
+      "routed_web": true,
+      "has_web_urls": true,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "w02": {
+    "baseline": {
+      "type": "web",
+      "abstained": false
+    },
+    "multi": {
+      "type": "web",
+      "abstained": false,
+      "routed_web": true,
+      "has_web_urls": true,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "w03": {
+    "baseline": {
+      "type": "web",
+      "abstained": true
+    },
+    "multi": {
+      "type": "web",
+      "abstained": false,
+      "routed_web": true,
+      "has_web_urls": true,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "w04": {
+    "baseline": {
+      "type": "web",
+      "abstained": true
+    },
+    "multi": {
+      "type": "web",
+      "abstained": false,
+      "routed_web": true,
+      "has_web_urls": true,
+      "route_correct": true,
+      "revised": true
+    }
+  },
+  "a01": {
+    "baseline": {
+      "type": "absent",
+      "abstained": true
+    },
+    "multi": {
+      "type": "absent",
+      "abstained": true,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "a02": {
+    "baseline": {
+      "type": "absent",
+      "abstained": true
+    },
+    "multi": {
+      "type": "absent",
+      "abstained": true,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "a03": {
+    "baseline": {
+      "type": "absent",
+      "abstained": true
+    },
+    "multi": {
+      "type": "absent",
+      "abstained": true,
+      "route_correct": true,
+      "revised": false
+    }
+  },
+  "a04": {
+    "baseline": {
+      "type": "absent",
+      "abstained": true
+    },
+    "multi": {
+      "type": "absent",
+      "abstained": true,
+      "route_correct": true,
+      "revised": false
+    }
+  }
+}

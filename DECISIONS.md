@@ -84,3 +84,10 @@ Decisions are logged as they are made, with the evidence available at the time.
 - Rejected: LLM-as-judge (the model that wrote an answer would grade it leniently, and judge calls would consume the same token budget).
 - Tradeoff accepted: regular-expression scoring can miss a correct answer that is phrased unusually; per-question outputs are committed so every scoring call can be audited.
 - Would revisit if: manual review of the committed outputs shows frequent scoring misses.
+
+### Decision: chunk size and top-k chosen by retrieval-only measurement, before any answer was scored
+- Context: with the original settings (800-word chunks, top-4) the retrieved context contained the evidence for only 61.5% of the 26 key facts (16 of 26) at about 3,930 context tokens, and one multi-agent query used 8,743 prompt tokens against a limit of 8,000 tokens per minute.
+- Chosen: chunk size 150 words, overlap 25, top-10, selected by a rule fixed in advance (`select_config` in `evaluation/retrieval_grid.py`): among configurations with at most 2,200 context tokens, the highest fact recall, ties to fewer tokens, then smaller chunks. Evidence: `evaluation/results/retrieval_grid.json`; recall 92.3% at about 1904 context tokens.
+- Rejected: 800-word chunks with top-5 (96.2% recall, but about 4,912 context tokens, which leaves no headroom under the 8,000 tokens/min limit once web results, measured at about 2,150 tokens per call, are added).
+- Tradeoff accepted: the settings were selected on the same 12 questions later used to score answers, so reported context recall is optimistic; smaller chunks carry less surrounding text. The answer comparison itself is unaffected, because both systems use the same retrieval.
+- Would revisit if: a held-out question set shows lower recall.

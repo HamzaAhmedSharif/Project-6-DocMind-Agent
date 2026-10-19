@@ -35,9 +35,9 @@ WRITER_MODEL = LLM_MODEL      # drafting + M2 baseline answers
 
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 
-CHUNK_SIZE = 800
-CHUNK_OVERLAP = 100
-TOP_K_RESULTS = 4
+CHUNK_SIZE = 150
+CHUNK_OVERLAP = 25
+TOP_K_RESULTS = 10
 
 DATA_DIR = "data"
 INDEX_PATH = "data/faiss_index"
