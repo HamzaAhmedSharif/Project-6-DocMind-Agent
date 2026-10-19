@@ -30,7 +30,8 @@
       "total": 2,
       "all_found": false,
       "routed_web": false,
-      "has_web_urls": false,
+      "web_results_retrieved": false,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": false
     }
@@ -69,7 +70,8 @@
       "total": 3,
       "all_found": true,
       "routed_web": false,
-      "has_web_urls": false,
+      "web_results_retrieved": false,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": false
     }
@@ -105,7 +107,8 @@
       "total": 2,
       "all_found": true,
       "routed_web": false,
-      "has_web_urls": false,
+      "web_results_retrieved": false,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": false
     }
@@ -141,7 +144,8 @@
       "total": 2,
       "all_found": true,
       "routed_web": false,
-      "has_web_urls": false,
+      "web_results_retrieved": false,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": false
     }
@@ -177,7 +181,8 @@
       "total": 2,
       "all_found": true,
       "routed_web": false,
-      "has_web_urls": false,
+      "web_results_retrieved": false,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": false
     }
@@ -213,7 +218,8 @@
       "total": 2,
       "all_found": false,
       "routed_web": false,
-      "has_web_urls": false,
+      "web_results_retrieved": false,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": false
     }
@@ -252,7 +258,8 @@
       "total": 3,
       "all_found": true,
       "routed_web": false,
-      "has_web_urls": false,
+      "web_results_retrieved": false,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": false
     }
@@ -288,7 +295,8 @@
       "total": 2,
       "all_found": true,
       "routed_web": false,
-      "has_web_urls": false,
+      "web_results_retrieved": false,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": false
     }
@@ -324,7 +332,8 @@
       "total": 2,
       "all_found": false,
       "routed_web": false,
-      "has_web_urls": false,
+      "web_results_retrieved": false,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": true
     }
@@ -360,7 +369,8 @@
       "total": 2,
       "all_found": true,
       "routed_web": false,
-      "has_web_urls": false,
+      "web_results_retrieved": false,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": false
     }
@@ -396,7 +406,8 @@
       "total": 2,
       "all_found": true,
       "routed_web": false,
-      "has_web_urls": false,
+      "web_results_retrieved": false,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": false
     }
@@ -432,7 +443,8 @@
       "total": 2,
       "all_found": false,
       "routed_web": false,
-      "has_web_urls": false,
+      "web_results_retrieved": false,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": false
     }
@@ -450,7 +462,8 @@
       "type": "web",
       "abstained": false,
       "routed_web": true,
-      "has_web_urls": true,
+      "web_results_retrieved": true,
+      "url_in_answer": true,
       "route_correct": true,
       "revised": false
     }
@@ -468,7 +481,8 @@
       "type": "web",
       "abstained": false,
       "routed_web": true,
-      "has_web_urls": true,
+      "web_results_retrieved": true,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": false
     }
@@ -486,7 +500,8 @@
       "type": "web",
       "abstained": false,
       "routed_web": true,
-      "has_web_urls": true,
+      "web_results_retrieved": true,
+      "url_in_answer": true,
       "route_correct": true,
       "revised": false
     }
@@ -504,7 +519,8 @@
       "type": "web",
       "abstained": false,
       "routed_web": true,
-      "has_web_urls": true,
+      "web_results_retrieved": true,
+      "url_in_answer": true,
       "route_correct": true,
       "revised": true
     }
@@ -522,7 +538,8 @@
       "type": "absent",
       "abstained": true,
       "routed_web": false,
-      "has_web_urls": false,
+      "web_results_retrieved": false,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": false
     }
@@ -540,7 +557,8 @@
       "type": "absent",
       "abstained": true,
       "routed_web": false,
-      "has_web_urls": false,
+      "web_results_retrieved": false,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": false
     }
@@ -558,7 +576,8 @@
       "type": "absent",
       "abstained": true,
       "routed_web": false,
-      "has_web_urls": false,
+      "web_results_retrieved": false,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": false
     }
@@ -576,7 +595,8 @@
       "type": "absent",
       "abstained": true,
       "routed_web": false,
-      "has_web_urls": false,
+      "web_results_retrieved": false,
+      "url_in_answer": false,
       "route_correct": true,
       "revised": false
     }

@@ -108,5 +108,34 @@ Decisions are logged as they are made, with the evidence available at the time.
 - Tradeoff accepted: 20 more LLM calls and a comparison added after seeing the first results; it is disclosed here and nothing was changed to improve any system.
 - Would revisit if: more questions are added, since 12 answerable questions are too few to separate small differences.
 
-### Run note: Groq API key rotated mid-plan
-- The old Groq API key began returning 403 "Access denied" on every request from ~14:40 CST (key-level flag; the key was still listed as active in the console). With Hamza's explicit authorization, HOSTED_API_KEY in .env was replaced with a new key (HTTP 200 verified); the key value is stored nowhere. The runner fingerprint covers only agents/*.py and config settings, not .env, so the resume was unaffected.
+### Run note: provider credential replaced mid-run
+- The provider began rejecting the original API key with HTTP 403 partway through the ablation, and the key was replaced in `.env`. The resume check fingerprints the pipeline code and settings, not credentials, so the run continued without mixing results.
+
+## M3d - evaluation finalization (2026-10-19)
+
+### Note: the web "cites URLs" metric measured retrieval, not citation
+- Symptom: the report said the multi-agent answers cited web URLs on 4 of 4 web questions.
+- Isolation: reading the saved answers showed no URL in the answer text of any of them (one answer even has an empty "Sources" column); the metric only checked that web results had been retrieved.
+- Cause: `report.py` tested whether the pipeline state held web URLs and labelled that as citation.
+- Fix: the row is now "web results retrieved" (4/4), and a separate row counts answers whose text contains a URL (3/4).
+- Lesson: name a metric for what it measures; a label that sounds stronger than the check is a bug.
+
+### Decision: paraphrase review reported next to the strict score
+- Context: strict regular-expression scoring counts a correct paraphrase as a miss, and 8 of the 11 strict misses were correct answers in different words (for example "each position ... can attend to ... all other positions in that same sequence").
+- Chosen: keep the strict score as the headline and add a second row, "coverage after paraphrase review", from `evaluation/adjudication.json`: 8 entries, each with a quote that the report script verifies against the saved answer. Evidence: strict coverage baseline 22/26, single call 23/26, multi-agent 22/26; after review baseline 24/26, single call 26/26, multi-agent 25/26.
+- Rejected: loosening the expected-answer patterns after seeing the results (that tunes the scorer toward the outcome); an LLM judge (same-model leniency, and extra tokens under the free-tier limit).
+- Tradeoff accepted: the entries were proposed by the project's AI assistant and are not yet confirmed by the author, which the results table says; with 26 facts the two views differ by only a few facts and no system is clearly better.
+- Would revisit if: the author's review changes an entry, or more questions are added.
+
+### Note: some correct answers may come from the model's memory, not the retrieved text
+- Symptom: the single-call system stated "label smoothing" for the regularization question although the retrieved context for that question did not contain it.
+- Isolation: `evaluation/grounding_check.py` compares each stated key fact with the retrieved context (no LLM calls). Key facts whose evidence is absent from the retrieved context: 2 of 26. Facts stated although their evidence was absent from the context: baseline 1, single call 2, multi-agent 1.
+- Cause: the paper is famous, and the writer prompt does not require answers to come only from the context, so a model can answer from memory; the baseline prompt does require it.
+- Consequence: key-fact coverage cannot tell a grounded answer from a remembered one on this document. A document published after the model's training cutoff, or a private one, is needed for a clean test (planned for the later evaluation project).
+- Lesson: choose evaluation documents the model cannot already know.
+
+### Note: reviewer feedback leaked into final answers
+- Symptom: the multi-agent final answer for w04 ends with "addressing the reviewer's concern"; questions whose multi-agent answer mentions the reviewer: w04.
+- Cause: on a revision the writer prompt contains the reviewer's feedback as an instruction ("address it"), and the model answered the reviewer inside the user-facing text.
+- Status: not fixed, because the pipeline code was frozen for the evaluation. The fix is one sentence in the writer's feedback note ("do not mention the reviewer or this feedback"), followed by a rerun of the comparison.
+- Lesson: text meant for the model can surface in the output; read the raw answers, not only the scores.

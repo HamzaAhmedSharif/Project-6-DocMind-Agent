@@ -5,6 +5,7 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from evaluation.adjudication import apply as apply_review, load_entries
 from evaluation.questions import QUESTIONS
 from evaluation.scoring import score_key_facts, is_abstention
 
@@ -57,7 +58,8 @@ def score_run(results):
                 item["abstained"] = is_abstention(r["answer"])
             if system == "multi":
                 item["routed_web"] = r["route"] == "WEB"
-                item["has_web_urls"] = len(r.get("web_urls", [])) > 0
+                item["web_results_retrieved"] = len(r.get("web_urls", [])) > 0
+                item["url_in_answer"] = "http" in r["answer"].lower()
                 item["route_correct"] = (r["route"] == "WEB") == (q["type"] == "web")
                 item["revised"] = r.get("revisions", 0) >= 1
             per_system[system] = item
@@ -125,6 +127,14 @@ def build_markdown(run, results, scores):
     multi_all = [v["multi"] for v in scores.values() if "multi" in v]
     multi_web = items(scores, "multi", "web")
     na = ["n/a", "n/a"]
+    review_entries = load_entries()
+    extra_hits, review_problems = apply_review(results, scores, review_entries)
+
+    def doc_cov_reviewed(s):
+        its = items(scores, s, "doc")
+        found = sum(i["found"] for i in its) + extra_hits.get(s, 0)
+        total = sum(i["total"] for i in its)
+        return f"{pct(found, total)} ({found}/{total})"
 
     lines = [
         "# Comparison results: baseline vs single call vs multi-agent",
@@ -148,12 +158,14 @@ def build_markdown(run, results, scores):
         head,
         sep,
         row("Answerable questions: key-fact coverage", [doc_cov(s) for s in SYSTEMS]),
+        row("Answerable questions: coverage after paraphrase review (see the Paraphrase review section)", [doc_cov_reviewed(s) for s in SYSTEMS]),
         row("Answerable questions: all key facts found", [doc_all(s) for s in SYSTEMS]),
         row("Answerable questions: multi-agent found more / same / fewer facts than this system (questions)", [versus(s) for s in SYSTEMS]),
         row("Not-in-paper questions: abstained", [abstained("absent")(s) for s in SYSTEMS]),
         row("Web questions: said it could not answer", [abstained("web")(s) for s in SYSTEMS]),
         row("Web questions: routed to web search", na + [ratio(sum(1 for i in multi_web if i["routed_web"]), len(multi_web))]),
-        row("Web questions: answer cites web URLs", na + [ratio(sum(1 for i in multi_web if i["has_web_urls"]), len(multi_web))]),
+        row("Web questions: web results retrieved", na + [ratio(sum(1 for i in multi_web if i["web_results_retrieved"]), len(multi_web))]),
+        row("Web questions: answer text contains a URL", na + [ratio(sum(1 for i in multi_web if i["url_in_answer"]), len(multi_web))]),
         row("Routing correct (all questions)", na + [ratio(sum(1 for i in multi_all if i["route_correct"]), len(multi_all))]),
         row("Reviewer requested a revision", na + [ratio(sum(1 for i in multi_all if i["revised"]), len(multi_all))]),
     ]
@@ -194,6 +206,22 @@ def build_markdown(run, results, scores):
             f"{multi.get('route', 'n/a')} | {'yes' if multi.get('revisions', 0) >= 1 else 'no'} | "
             f"{multi.get('calls', 'n/a')} | {multi.get('prompt_tokens', 'n/a')} |"
         )
+    if review_entries:
+        lines += [
+            "",
+            "## Paraphrase review",
+            "",
+            "Strict scoring counts a correct paraphrase as a miss. The entries below are strict misses whose saved answer states the fact in different words; "
+            "each quote is verified against the saved answer by the report script. The entries were proposed by the project's AI assistant and are to be confirmed by the author.",
+            "",
+            "| id | system | fact | supporting quote |",
+            "|---|---|---|---|",
+        ]
+        for e in review_entries:
+            fact = QMAP[e["id"]]["key_facts"][e["fact"]]["fact"]
+            lines.append(f"| {e['id']} | {LABELS[e['system']]} | {fact} | {e['quote']} |")
+        if review_problems:
+            lines += ["", "REVIEW PROBLEMS (entries not counted):"] + [f"- {p}" for p in review_problems]
     return "\n".join(lines) + "\n"
 
 

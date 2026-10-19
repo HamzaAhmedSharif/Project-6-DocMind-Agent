@@ -1,0 +1,30 @@
+{
+  "facts_absent_from_context": [
+    "d09: residual dropout",
+    "d09: label smoothing"
+  ],
+  "per_system": {
+    "baseline": {
+      "facts_stated": 22,
+      "supported": 21,
+      "unsupported": [
+        "d09: residual dropout"
+      ]
+    },
+    "single_writer": {
+      "facts_stated": 23,
+      "supported": 21,
+      "unsupported": [
+        "d09: residual dropout",
+        "d09: label smoothing"
+      ]
+    },
+    "multi": {
+      "facts_stated": 22,
+      "supported": 21,
+      "unsupported": [
+        "d09: residual dropout"
+      ]
+    }
+  }
+}

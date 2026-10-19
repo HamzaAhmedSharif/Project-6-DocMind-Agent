@@ -1,0 +1,53 @@
+{
+  "note": "Paraphrase review of strict misses. Each quote is verified against the saved answer by evaluation/report.py. Proposed by the project's AI assistant on 2026-10-19; to be confirmed by the author.",
+  "entries": [
+    {
+      "fact": 0,
+      "id": "d01",
+      "quote": "each position of the sequence can attend to (i.e., compute a weighted combination of) all other positions in that same sequence",
+      "system": "single_writer"
+    },
+    {
+      "fact": 0,
+      "id": "d01",
+      "quote": "each position of the sequence can attend to (i.e., compute a weighted combination of) all other positions of that same sequence",
+      "system": "multi"
+    },
+    {
+      "fact": 0,
+      "id": "d06",
+      "quote": "Capture information from multiple representation sub-spaces",
+      "system": "single_writer"
+    },
+    {
+      "fact": 0,
+      "id": "d06",
+      "quote": "Capture information from multiple representation sub-spaces",
+      "system": "multi"
+    },
+    {
+      "fact": 0,
+      "id": "d12",
+      "quote": "each position cannot attend to any later (future) positions",
+      "system": "baseline"
+    },
+    {
+      "fact": 1,
+      "id": "d12",
+      "quote": "the model is forced to use only the already-generated tokens when predicting the next token",
+      "system": "baseline"
+    },
+    {
+      "fact": 0,
+      "id": "d12",
+      "quote": "block each position from looking ahead to tokens that have not yet been generated",
+      "system": "single_writer"
+    },
+    {
+      "fact": 0,
+      "id": "d12",
+      "quote": "block each position from looking ahead to tokens that have not yet been generated",
+      "system": "multi"
+    }
+  ]
+}

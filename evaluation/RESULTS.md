@@ -11,12 +11,14 @@ Scoring is rule-based (`evaluation/scoring.py`). A fact counts only if the answe
 | Metric | Baseline (M2 prompt, 1 call) | Single call, writer prompt | Multi-agent |
 |---|---|---|---|
 | Answerable questions: key-fact coverage | 84.6% (22/26) | 88.5% (23/26) | 84.6% (22/26) |
+| Answerable questions: coverage after paraphrase review (see the Paraphrase review section) | 92.3% (24/26) | 100.0% (26/26) | 96.2% (25/26) |
 | Answerable questions: all key facts found | 9/12 | 9/12 | 8/12 |
 | Answerable questions: multi-agent found more / same / fewer facts than this system (questions) | 2 / 8 / 2 | 0 / 11 / 1 | n/a |
 | Not-in-paper questions: abstained | 4/4 | 4/4 | 4/4 |
 | Web questions: said it could not answer | 3/4 | 3/4 | 0/4 |
 | Web questions: routed to web search | n/a | n/a | 4/4 |
-| Web questions: answer cites web URLs | n/a | n/a | 4/4 |
+| Web questions: web results retrieved | n/a | n/a | 4/4 |
+| Web questions: answer text contains a URL | n/a | n/a | 3/4 |
 | Routing correct (all questions) | n/a | n/a | 20/20 |
 | Reviewer requested a revision | n/a | n/a | 2/20 |
 
@@ -70,3 +72,18 @@ Scoring is rule-based (`evaluation/scoring.py`). A fact counts only if the answe
 | a02 | absent | abstained | abstained | abstained | DOC | no | 3 | 5995 |
 | a03 | absent | abstained | abstained | abstained | DOC | no | 3 | 5679 |
 | a04 | absent | abstained | abstained | abstained | DOC | no | 3 | 5361 |
+
+## Paraphrase review
+
+Strict scoring counts a correct paraphrase as a miss. The entries below are strict misses whose saved answer states the fact in different words; each quote is verified against the saved answer by the report script. The entries were proposed by the project's AI assistant and are to be confirmed by the author.
+
+| id | system | fact | supporting quote |
+|---|---|---|---|
+| d01 | Single call, writer prompt | relates different positions of a single sequence | each position of the sequence can attend to (i.e., compute a weighted combination of) all other positions in that same sequence |
+| d01 | Multi-agent | relates different positions of a single sequence | each position of the sequence can attend to (i.e., compute a weighted combination of) all other positions of that same sequence |
+| d06 | Single call, writer prompt | attends to different representation subspaces | Capture information from multiple representation sub-spaces |
+| d06 | Multi-agent | attends to different representation subspaces | Capture information from multiple representation sub-spaces |
+| d12 | Baseline (M2 prompt, 1 call) | positions cannot attend to subsequent positions | each position cannot attend to any later (future) positions |
+| d12 | Baseline (M2 prompt, 1 call) | predictions depend only on known outputs at earlier positions | the model is forced to use only the already-generated tokens when predicting the next token |
+| d12 | Single call, writer prompt | positions cannot attend to subsequent positions | block each position from looking ahead to tokens that have not yet been generated |
+| d12 | Multi-agent | positions cannot attend to subsequent positions | block each position from looking ahead to tokens that have not yet been generated |
