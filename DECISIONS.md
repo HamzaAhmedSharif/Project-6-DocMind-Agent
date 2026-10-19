@@ -91,3 +91,22 @@ Decisions are logged as they are made, with the evidence available at the time.
 - Rejected: 800-word chunks with top-5 (96.2% recall, but about 4,912 context tokens, which leaves no headroom under the 8,000 tokens/min limit once web results, measured at about 2,150 tokens per call, are added).
 - Tradeoff accepted: the settings were selected on the same 12 questions later used to score answers, so reported context recall is optimistic; smaller chunks carry less surrounding text. The answer comparison itself is unaffected, because both systems use the same retrieval.
 - Would revisit if: a held-out question set shows lower recall.
+
+## M3c - scoring correction and ablation (2026-10-19)
+
+### Note: the scorer misread typographic characters
+- Symptom: the first report showed the baseline ahead on key-fact coverage (20/26 vs 19/26).
+- Isolation: auditing the raw answers behind the missed facts showed correct answers scored as misses: they use non-breaking hyphens (`Scaled Dot-Product Attention`, `feed-forward`) and a spaced thousands separator (`4 000 steps`), which the regular expressions did not match.
+- Cause: `evaluation/scoring.py` compared raw text without normalizing Unicode hyphens, spaces and thousands separators.
+- Fix: answers are normalized (Unicode NFKC, hyphen and space variants, quotes, thousands separators) before matching, for every system alike. No expected-answer pattern was loosened, so correct paraphrases still count as misses. Rescoring the saved raw outputs (no new LLM calls) changed 5 fact counts (d02 baseline and multi-agent, d04 baseline and multi-agent, d08 multi-agent); coverage became baseline 22/26 and multi-agent 22/26. The first report remains in git history (commit 558bdb0).
+- Lesson: audit the raw outputs behind a metric before reading a small difference as real; with 26 facts, one miss is 3.8 points.
+
+### Decision: add a single-call ablation that uses the multi-agent writer prompt
+- Context: the baseline (M2) prompt says to answer only from the context and to say so when the context lacks the answer; the multi-agent writer prompt does not, so differences between the two systems could come from prompt wording instead of routing, review and web search.
+- Chosen: a third system, `single_writer` (retrieve, then one call with the multi-agent writer prompt, no routing, review or web search), run on the same 20 questions after the first run; its results were added to the same run file and the first-run results are unchanged. Evidence: key-fact coverage baseline 22/26, single call 23/26, multi-agent 22/26.
+- Rejected: reading the baseline-vs-multi-agent gap as an effect of agent structure alone.
+- Tradeoff accepted: 20 more LLM calls and a comparison added after seeing the first results; it is disclosed here and nothing was changed to improve any system.
+- Would revisit if: more questions are added, since 12 answerable questions are too few to separate small differences.
+
+### Run note: Groq API key rotated mid-plan
+- The old Groq API key began returning 403 "Access denied" on every request from ~14:40 CST (key-level flag; the key was still listed as active in the console). With Hamza's explicit authorization, HOSTED_API_KEY in .env was replaced with a new key (HTTP 200 verified); the key value is stored nowhere. The runner fingerprint covers only agents/*.py and config settings, not .env, so the resume was unaffected.

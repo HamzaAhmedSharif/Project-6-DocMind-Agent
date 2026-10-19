@@ -1,4 +1,9 @@
-"""Runs the single-agent baseline and the multi-agent pipeline on every evaluation question.
+"""Runs the comparison systems on every evaluation question.
+
+Systems:
+  baseline       M2 single call with its original prompt (agents/rag_chain.py)
+  single_writer  one call with the multi-agent writer prompt; no routing, review or web search
+  multi          supervisor route -> researcher -> writer -> supervisor review (agents/graph.py)
 
 Raw outputs are saved after every call, so a quota stop can be resumed by running the same command again.
 Resuming is refused if the pipeline code or settings changed since the run started (results must not mix).
@@ -17,12 +22,14 @@ import config
 from agents.llm import STATS, reset_stats
 from agents.retriever import Retriever
 from agents.rag_chain import answer_question
+from agents.writer import write_answer
 from agents.graph import run_query
 from evaluation.questions import QUESTIONS
 
 DEFAULT_OUT = os.path.join("evaluation", "results", "run_main.json")
 FROZEN_FILES = [os.path.join("agents", name) for name in
                 ("supervisor.py", "writer.py", "rag_chain.py", "researcher.py", "graph.py")]
+SYSTEMS = ("baseline", "single_writer", "multi")
 
 
 def fingerprint() -> dict:
@@ -54,6 +61,18 @@ def run_baseline(question, retriever):
     started = time.time()
     result = answer_question(question, retriever)
     return {"answer": result["answer"], "doc_sources": sorted(result["sources"]), **snapshot(started)}
+
+
+def run_single_writer(question, retriever):
+    reset_stats()
+    started = time.time()
+    state = {"query": question, "doc_context": retriever.retrieve(question), "web_context": [], "review_feedback": ""}
+    result = write_answer(state)
+    return {
+        "answer": result["draft_answer"],
+        "doc_sources": sorted({r["source"] for r in state["doc_context"]}),
+        **snapshot(started),
+    }
 
 
 def run_multi(question):
@@ -101,13 +120,15 @@ def main() -> int:
         if only and q["id"] not in only:
             continue
         entry = run["results"].setdefault(q["id"], {"type": q["type"], "question": q["question"]})
-        for system in ("baseline", "multi"):
+        for system in SYSTEMS:
             if system in entry and "error" not in entry[system]:
                 continue  # already complete
             print(f"\n=== {q['id']} [{q['type']}] {system} ===")
             try:
                 if system == "baseline":
                     entry[system] = run_baseline(q["question"], retriever)
+                elif system == "single_writer":
+                    entry[system] = run_single_writer(q["question"], retriever)
                 else:
                     entry[system] = run_multi(q["question"])
             except RuntimeError as e:
@@ -121,8 +142,8 @@ def main() -> int:
                 entry[system] = {"error": f"{type(e).__name__}: {str(e)[:500]}"}
             save()
 
-    done = sum(1 for e in run["results"].values() for s in ("baseline", "multi") if s in e and "error" not in e[s])
-    errors = sum(1 for e in run["results"].values() for s in ("baseline", "multi") if s in e and "error" in e[s])
+    done = sum(1 for e in run["results"].values() for s in SYSTEMS if s in e and "error" not in e[s])
+    errors = sum(1 for e in run["results"].values() for s in SYSTEMS if s in e and "error" in e[s])
     print(f"\nFinished pass: {done} results complete, {errors} with errors (rerun the same command to retry errors).")
     return 0 if errors == 0 else 1
 

@@ -1,8 +1,14 @@
 """Pure scoring functions for the comparison. No network, no LLM. Raw outputs are stored separately,
 so scoring can be corrected and rerun without spending tokens."""
 import re
+import unicodedata
 
 _THINK_RE = re.compile(r"<think>.*?</think>", re.DOTALL | re.IGNORECASE)
+_DASHES = {ord(c): "-" for c in "\u2010\u2011\u2012\u2013\u2014\u2015\u2212"}
+_SPACES = {ord(c): " " for c in "\u00a0\u2002\u2003\u2009\u200a\u202f\u205f\u3000"}
+_QUOTES = {ord("\u2018"): "'", ord("\u2019"): "'", ord("\u201c"): '"', ord("\u201d"): '"'}
+_ZERO_WIDTH = {ord(c): None for c in "\u200b\u200c\u200d\u2060\ufeff"}
+_THOUSANDS_RE = re.compile(r"(?<![\d.])(\d{1,3})[ ,](?=\d{3}(?!\d))")
 
 ABSTAIN_PATTERNS = [
     r"(does\s*not|doesn't|did\s*not|didn't|do\s*not|don't)\s*(contain|mention|provide|include|report|specify|state|cover|discuss|address|give|have|say|offer|present)",
@@ -15,7 +21,11 @@ ABSTAIN_PATTERNS = [
 
 
 def clean(text: str) -> str:
-    text = _THINK_RE.sub("", text or "")
+    """Normalize typography so equivalent characters compare equal (applied to every system alike)."""
+    text = unicodedata.normalize("NFKC", text or "")
+    text = _THINK_RE.sub("", text)
+    text = text.translate(_ZERO_WIDTH).translate(_DASHES).translate(_SPACES).translate(_QUOTES)
+    text = _THOUSANDS_RE.sub(r"\1", text)
     return re.sub(r"\s+", " ", text).strip()
 
 
