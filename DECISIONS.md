@@ -149,3 +149,19 @@ Decisions are logged as they are made, with the evidence available at the time.
 - Rejected: refactoring `Retriever` for in-memory uploads now (the evaluated code would then differ from the shipped code).
 - Tradeoff accepted: the demo answers questions about the indexed document only; uploads and a service API belong to the productionization project.
 - Would revisit if: the evaluation is rerun on new code.
+
+## M6 and M7 - tests, CI and documentation (2026-10-20)
+
+### Decision: an offline test suite with scripted fakes, rehearsed in a clean clone
+- Context: the pipeline needs a live LLM, an index and an embedding model to run end to end, none of which a reviewer or a CI runner has.
+- Chosen: tests replace the LLM client with scripted replies, the researcher with a fake and the clock with a recorded one, so routing, the one-revision cap, the empty-draft guard, token-bucket pacing, rate-limit handling, scoring and the UI's no-index message are tested with no keys, GPU or network. CI installs only light dependencies (`requirements-ci.txt`). Evidence: 49 tests pass in the project environment and in a clean clone that has only those dependencies.
+- Rejected: tests that call the provider (they need secrets, hit rate limits and are flaky); retrieval-quality tests in CI (they need the embedding model and the document; retrieval quality is measured by `evaluation/retrieval_grid.py` instead).
+- Tradeoff accepted: the tests prove the orchestration logic, not answer quality; answer quality is covered by the committed evaluation.
+- Would revisit if: the pipeline gains a component that cannot be faked cheaply.
+
+### Decision: the README's results block is generated and checked
+- Context: numbers typed into a README drift from the evaluation, and one metric in this project was already mislabeled.
+- Chosen: `scripts/sync_readme.py` copies the answer-quality and cost tables from `evaluation/RESULTS.md` into the README, and a test fails if they differ.
+- Rejected: hand-copied tables.
+- Tradeoff accepted: the README can only show tables the report script produces.
+- Would revisit if: the report format changes (the extraction markers in `sync_readme.py` must change with it).
