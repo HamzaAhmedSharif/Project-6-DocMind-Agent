@@ -150,8 +150,9 @@ def build_markdown(run, results, scores):
         "plus web search when routed), writer, and supervisor review with at most one revision.",
         "",
         "Scoring is rule-based (`evaluation/scoring.py`). A fact counts only if the answer contains the expected wording after normalizing Unicode dashes, "
-        "spaces and thousands separators; correct paraphrases count as misses for every system. Web questions are scored on routing and citation presence "
-        "only: the correctness of web answers is not measured here. Raw answers are in `evaluation/results/run_main.json`.",
+        "spaces and thousands separators; correct paraphrases count as misses for every system in the strict rows (the paraphrase-review row counts them separately). "
+        "Web questions are scored only on routing, on whether web results were retrieved and on whether the answer text contains a URL; "
+        "the correctness of web answers is not measured here. Raw answers are in `evaluation/results/run_main.json`.",
         "",
         "## Answer quality",
         "",

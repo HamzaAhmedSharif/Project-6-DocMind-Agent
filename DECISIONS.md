@@ -115,10 +115,10 @@ Decisions are logged as they are made, with the evidence available at the time.
 
 ### Note: the web "cites URLs" metric measured retrieval, not citation
 - Symptom: the report said the multi-agent answers cited web URLs on 4 of 4 web questions.
-- Isolation: reading the saved answers showed no URL in the answer text of any of them (one answer even has an empty "Sources" column); the metric only checked that web results had been retrieved.
-- Cause: `report.py` tested whether the pipeline state held web URLs and labelled that as citation.
+- Isolation: the check only tested whether the pipeline had retrieved web results; it never looked at the answer text. Measuring the text separately found a URL in 3 of the 4 web answers.
+- Cause: `report.py` tested the pipeline state (`web_urls`) and labelled it as citation.
 - Fix: the row is now "web results retrieved" (4/4), and a separate row counts answers whose text contains a URL (3/4).
-- Lesson: name a metric for what it measures; a label that sounds stronger than the check is a bug.
+- Lesson: name a metric for what it measures, and count a claim from the saved output instead of reading the output by eye.
 
 ### Decision: paraphrase review reported next to the strict score
 - Context: strict regular-expression scoring counts a correct paraphrase as a miss, and 8 of the 11 strict misses were correct answers in different words (for example "each position ... can attend to ... all other positions in that same sequence").
@@ -130,6 +130,7 @@ Decisions are logged as they are made, with the evidence available at the time.
 ### Note: some correct answers may come from the model's memory, not the retrieved text
 - Symptom: the single-call system stated "label smoothing" for the regularization question although the retrieved context for that question did not contain it.
 - Isolation: `evaluation/grounding_check.py` compares each stated key fact with the retrieved context (no LLM calls). Key facts whose evidence is absent from the retrieved context: 2 of 26. Facts stated although their evidence was absent from the context: baseline 1, single call 2, multi-agent 1.
+- Caveat: the evidence pattern for "residual dropout" is a section heading and the matching answer pattern is the generic word "dropout", so the single flagged fact for the baseline and the multi-agent system is weak evidence of memory use; "label smoothing" in the single-call system is the clear case.
 - Cause: the paper is famous, and the writer prompt does not require answers to come only from the context, so a model can answer from memory; the baseline prompt does require it.
 - Consequence: key-fact coverage cannot tell a grounded answer from a remembered one on this document. A document published after the model's training cutoff, or a private one, is needed for a clean test (planned for the later evaluation project).
 - Lesson: choose evaluation documents the model cannot already know.
