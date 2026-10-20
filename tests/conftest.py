@@ -5,9 +5,6 @@ from pathlib import Path
 
 import pytest
 
-# Manual scripts that need a live LLM and a built index; pytest must not import them.
-collect_ignore = ["test_m2.py", "test_m3.py"]
-
 ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))

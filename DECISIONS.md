@@ -1,4 +1,4 @@
-# DocMind Agent — Decisions & Engineering Notes
+# DocMind Agent - Decisions & Engineering Notes
 
 Decisions are logged as they are made, with the evidence available at the time.
 
@@ -6,7 +6,7 @@ Decisions are logged as they are made, with the evidence available at the time.
 
 ### Decision: LLM backend for generation
 - Context: the OpenAI API call failed with `429 insufficient_quota` (no prepaid credit); project budget is zero.
-- Chosen: Google Gemini free tier via AI Studio. Evidence: `tests/test_m2.py` returns a grounded answer with a source citation (M2 commit).
+- Chosen: Google Gemini free tier via AI Studio. Evidence: `scripts/ask_baseline.py` (named `tests/test_m2.py` at the time) returns a grounded answer with a source citation (M2 commit).
 - Rejected: OpenAI gpt-4o-mini (needs prepaid credit); local flan-t5-base as in Project 5 (assumed too weak for supervisor routing in M3, untested assumption).
 - Tradeoff accepted: free-tier rate limits, and model names get retired. `gemini-2.0-flash` returned 404 mid-build and had to be bumped to `gemini-3.8-flash`.
 - Would revisit if: rate limits throttle the M3 comparison runs or the Project 9 evaluation.
@@ -75,12 +75,12 @@ Decisions are logged as they are made, with the evidence available at the time.
 - Symptom: each multi-agent test query hit one rate-limit retry and waited a fixed 60 seconds.
 - Isolation: the provider headers reported `x-ratelimit-limit-tokens: 8000` (per minute) and `x-ratelimit-limit-requests: 1000` (per day). Measured prompt tokens per query were 4198 (baseline, 1 call), 8743 (document question, 3 calls) and 13048 (web question, 3 calls), so one multi-agent query exceeds a full minute of token budget while requests stay far below their limit. The headers also showed the budget refilling continuously (590 tokens used, reset in 4.425 s, about 133 tokens/s) and that the limiter counted the prompt plus the requested `max_tokens` (78 + 512 = 590 deducted for a 97-token call).
 - Cause: pacing by request count and a blind 60-second sleep ignored the token budget.
-- Fix: `agents/llm.py` now paces with a token bucket per model (`HOSTED_TPM` in `.env`), reads the provider's `try again in` hint for retries, fails with a clear message on requests larger than the per-minute budget, and does not set `max_tokens` on pipeline calls. Measured after the change on the same document question: throttle_seconds=17.466099087397257, rate-limit retries=0 (before: one 60-second retry).
+- Fix: `agents/llm.py` now paces with a token bucket per model (`HOSTED_TPM` in `.env`), reads the provider's `try again in` hint for retries, fails with a clear message on requests larger than the per-minute budget, and does not set `max_tokens` on pipeline calls. Measured after the change on the same document question: throttle_seconds=17.5, rate-limit retries=0 (before: one 60-second retry).
 - Lesson: read which limit the provider actually enforces, and pace against that one.
 
 ### Decision: rule-based scoring for the comparison, not an LLM judge
 - Context: the comparison needs answer quality for two systems on the same questions, and the free tier allows about 8000 tokens per minute.
-- Chosen: key-fact coverage (regular expressions) for questions the paper answers, routing correctness plus citation presence for questions that need the web, and abstention for questions the paper does not answer. Every key fact is checked against the paper's own text by `evaluation/validate_questions.py` (26 of 26 facts found). Retrieval is also checked offline: whether the retrieved context contains the evidence for each key fact (`evaluation/retrieval_grid.py`).
+- Chosen: key-fact coverage (regular expressions) for questions the paper answers, routing correctness, whether web results were retrieved and whether the answer text contains a URL for questions that need the web, and abstention for questions the paper does not answer. Every key fact is checked against the paper's own text by `evaluation/validate_questions.py` (26 of 26 facts found). Retrieval is also checked offline: whether the retrieved context contains the evidence for each key fact (`evaluation/retrieval_grid.py`).
 - Rejected: LLM-as-judge (the model that wrote an answer would grade it leniently, and judge calls would consume the same token budget).
 - Tradeoff accepted: regular-expression scoring can miss a correct answer that is phrased unusually; per-question outputs are committed so every scoring call can be audited.
 - Would revisit if: manual review of the committed outputs shows frequent scoring misses.
