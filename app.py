@@ -1,6 +1,7 @@
 """DocMind Agent: Streamlit front end over the evaluated pipelines.
 
 Index a document first:  python agents/ingest.py   (PDFs in data/)
+                         or upload a PDF in the app itself.
 Run the app:             streamlit run app.py
 """
 import os
@@ -8,6 +9,16 @@ import sys
 import time
 
 import streamlit as st
+
+# On Streamlit Community Cloud there is no .env file: the app's Secrets are
+# its configuration. Copy them into the environment before config.py reads
+# it. Locally no secrets are configured, this is a no-op, and .env rules.
+try:
+    for _key, _value in st.secrets.items():
+        if isinstance(_value, (str, int, float)):
+            os.environ.setdefault(_key, str(_value))
+except Exception:
+    pass
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -69,6 +80,24 @@ def run_selected(mode, question):
     return out
 
 
+
+def index_uploaded_pdf(uploaded) -> int:
+    """Save an uploaded PDF into data/ and rebuild the index from it alone.
+
+    Returns the chunk count. Raises ValueError (with the existing index
+    untouched) for PDFs without a usable text layer.
+    """
+    from agents.ingest import build_index_for_file
+
+    os.makedirs(config.DATA_DIR, exist_ok=True)
+    safe_name = os.path.basename(uploaded.name).replace("/", "_").replace("\\", "_")
+    target = os.path.join(config.DATA_DIR, safe_name)
+    with open(target, "wb") as f:
+        f.write(uploaded.getbuffer())
+    chunks = build_index_for_file(target)
+    load_pipelines()[0].reload()  # the cached retriever must see the new index
+    return chunks
+
 st.title("DocMind Agent")
 st.caption(
     "Question answering over an indexed PDF. In multi-agent mode a supervisor routes each question, "
@@ -82,8 +111,30 @@ with st.sidebar:
     st.caption(f"Retrieval: {config.CHUNK_SIZE}-word chunks, top-{config.TOP_K_RESULTS}")
     st.caption("Free-tier rate limits can add waiting time; it is reported next to each answer.")
 
+uploaded = st.file_uploader(
+    "Upload a PDF to ask questions about it",
+    type="pdf",
+    help="The PDF is indexed on the spot. Text-based PDFs only: scanned images have no text layer to read. "
+         "On this hosted demo the uploaded document replaces the current one for everyone.",
+)
+if uploaded is not None:
+    file_id = (uploaded.name, uploaded.size)
+    if st.session_state.get("indexed_upload") != file_id:
+        try:
+            with st.spinner(f"Indexing {uploaded.name}..."):
+                chunk_count = index_uploaded_pdf(uploaded)
+        except ValueError as e:
+            st.error(str(e))
+        except Exception as e:  # corrupt file, parser failure, ...
+            st.error(f"Could not index that PDF: {type(e).__name__}: {e}")
+        else:
+            st.session_state["indexed_upload"] = file_id
+            st.success(f"Indexed {chunk_count} chunks from {uploaded.name}. Ask a question below.")
+    else:
+        st.caption(f"Current document: {uploaded.name} (indexed from your upload)")
+
 if not os.path.exists(f"{config.INDEX_PATH}.bin"):
-    st.error("No index found. Put a PDF in `data/` and run `python agents/ingest.py`, then reload this page.")
+    st.error("No index found. Upload a PDF above to index it, or put a PDF in `data/` and run `python agents/ingest.py`, then reload this page.")
     st.stop()
 load_pipelines()
 

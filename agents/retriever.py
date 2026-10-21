@@ -13,6 +13,11 @@ from config import INDEX_PATH, EMBEDDING_MODEL, TOP_K_RESULTS
 class Retriever:
     def __init__(self):
         self.model = SentenceTransformer(EMBEDDING_MODEL)
+        self.reload()
+
+    def reload(self):
+        """Re-read the index files from disk (e.g. after an upload rebuilt
+        them) without reloading the embedding model."""
         self.index = faiss.read_index(f"{INDEX_PATH}.bin")
         with open(f"{INDEX_PATH}_meta.pkl", "rb") as f:
             meta = pickle.load(f)
