@@ -5,8 +5,18 @@ network, API keys and model downloads, like the rest of the suite.
 """
 import pickle
 
-import numpy as np
 import pytest
+
+# agents.ingest / agents.retriever pull in the heavy document stack (pypdf,
+# faiss, sentence-transformers, numpy). Those live in requirements.txt, not
+# in the deliberately light requirements-ci.txt, so on CI this module skips;
+# in the full dev environment every test below runs.
+pytest.importorskip("pypdf")
+pytest.importorskip("faiss")
+pytest.importorskip("sentence_transformers")
+pytest.importorskip("numpy")
+
+import numpy as np
 
 import agents.ingest as ingest
 import agents.retriever as retriever_mod
