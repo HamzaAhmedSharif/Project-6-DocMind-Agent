@@ -10,6 +10,10 @@ import time
 
 import streamlit as st
 
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+st.set_page_config(page_title="DocMind Agent", layout="wide")
+
 # On Streamlit Community Cloud there is no .env file: the app's Secrets are
 # its configuration. Copy them into the environment before config.py reads
 # it. Locally no secrets are configured, this is a no-op, and .env rules.
@@ -20,12 +24,8 @@ try:
 except Exception:
     pass
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
 import config
 from agents.llm import STATS, reset_stats
-
-st.set_page_config(page_title="DocMind Agent", layout="wide")
 
 MODES = {
     "Multi-agent (route, retrieve, write, review)": "multi",
