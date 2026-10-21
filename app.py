@@ -108,6 +108,13 @@ with st.sidebar:
     st.header("Pipeline")
     mode_label = st.radio("Mode", list(MODES), label_visibility="collapsed")
     st.caption(f"Backend: {config.LLM_PROVIDER} / {config.LLM_MODEL}")
+    _k = config.LLM_API_KEY or ""
+    _t = getattr(config, "TAVILY_API_KEY", "") or ""
+    st.caption(
+        "Key check: "
+        + (f"{_k[:4]}...{_k[-2:]} (len {len(_k)})" if _k else "EMPTY")
+        + f" | Tavily len {len(_t)} | {config.LLM_BASE_URL}"
+    )
     st.caption(f"Retrieval: {config.CHUNK_SIZE}-word chunks, top-{config.TOP_K_RESULTS}")
     st.caption("Free-tier rate limits can add waiting time; it is reported next to each answer.")
 
