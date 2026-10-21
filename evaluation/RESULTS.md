@@ -75,7 +75,7 @@ Scoring is rule-based (`evaluation/scoring.py`). A fact counts only if the answe
 
 ## Paraphrase review
 
-Strict scoring counts a correct paraphrase as a miss. The entries below are strict misses whose saved answer states the fact in different words; each quote is verified against the saved answer by the report script. The entries were proposed by the project's AI assistant and are to be confirmed by the author.
+Strict scoring counts a correct paraphrase as a miss. The entries below are strict misses whose saved answer states the fact in different words; each quote is verified against the saved answer by the report script. The entries were proposed by the project's AI assistant and were confirmed by the author on 2026-10-21.
 
 | id | system | fact | supporting quote |
 |---|---|---|---|
